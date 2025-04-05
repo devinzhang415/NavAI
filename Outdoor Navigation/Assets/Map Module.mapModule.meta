@@ -1,8 +1,8 @@
-- !<AssetImportMetadata/af7c2497-8b9a-4a41-a409-d8a285c0a8ca>
+- !<AssetImportMetadata/ea095727-e60f-44e2-a93a-8df5959fd7be>
   ImportedAssetIds:
-    Material: !<reference> 006fd6a3-d422-4b54-a0a2-aba26ced780d
-  ImporterName: MaterialImporter
-  PrimaryAsset: !<reference> 006fd6a3-d422-4b54-a0a2-aba26ced780d
+    MapModule: !<reference> bab2c2cf-a885-4140-8f8f-2f95495e0c1e
+  ImporterName: MapModuleImporter
+  PrimaryAsset: !<reference> bab2c2cf-a885-4140-8f8f-2f95495e0c1e
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:

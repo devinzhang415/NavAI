@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify
 import os
 from dotenv import load_dotenv
@@ -227,26 +226,36 @@ def test_gemini_direct():
             "trace": str(e)
         }), 500
 
-@app.route('/gemini_ocr', methods=['POST'])
-def gemini_ocr():
-    # Get the image from the request
-
-    if 'image' not in request.files:
-        return jsonify({"error": "No image provided"}), 400
-    
-    image_blob = request.files['image']
-    # Read the image data
-    image_data = image_blob.read()
-
-    google_maps_text = request.form['google_maps_info']
-    
-    client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
-    response = client.models.generate_content(
-        model='gemini-2.0-flash-exp',
-        contents=['In this picture, are there any distinctive text? If so return ONLY the text, otherwise output "None"', types.Part.from_bytes(data=image_data, mime_type='image/jpeg')]
-    )
-    words = response.text.split('\n')
-    return jsonify({'words': words})
+@app.route('/generate-place-description', methods=['POST'])
+def generate_place_description():
+    if not apis_loaded:
+        return jsonify({"error": "Gemini API not loaded correctly"}), 500
+        
+    try:
+        data = request.get_json()
+        place_name = data.get('place_name')
+        maps_info = data.get('maps_info')
+        
+        if not place_name:
+            return jsonify({"error": "Missing place_name parameter"}), 400
+        
+        if not maps_info:
+            return jsonify({"error": "Missing maps_info parameter"}), 400
+            
+        # Call the Gemini API function
+        result = gemini_api.generate_place_description(
+            place_name=place_name,
+            maps_info=maps_info
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "description": None,
+            "error": str(e)
+        }), 500
 
 if __name__ == '__main__':
     # Use the PORT environment variable provided by Heroku, or default to 5000
