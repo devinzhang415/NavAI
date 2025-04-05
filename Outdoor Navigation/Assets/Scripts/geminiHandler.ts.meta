@@ -1,20 +1,20 @@
-- !<AssetImportMetadata/9d4d6c66-7fce-43f3-a4b2-0a8f707f9017>
+- !<AssetImportMetadata/9ef800c2-7ace-43ee-8181-7004890d6014>
   ImportedAssetIds:
-    TypeScriptAsset: !<reference> d37cf09a-0c82-47c8-b6ba-bd44128d2663
+    TypeScriptAsset: !<reference> 1c3c8a43-3a20-4b93-8e19-d90a7d9423d0
   ImporterName: TypeScriptAssetImporter
-  PrimaryAsset: !<reference> d37cf09a-0c82-47c8-b6ba-bd44128d2663
+  PrimaryAsset: !<reference> 1c3c8a43-3a20-4b93-8e19-d90a7d9423d0
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:
     {}
   AssetDataMap:
-    TypeScriptAsset: !<own> 7c9c4cd2-902f-4cc1-9d47-055e6580071b
+    TypeScriptAsset: !<own> d54f5ed9-2122-4479-a3d1-00c84d46323c
   DependentFiles:
     []
   ImporterSettings: !<AssetImporterSettings>
     {}
   CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
-- !<TypeScriptAssetData/7c9c4cd2-902f-4cc1-9d47-055e6580071b>
+- !<TypeScriptAssetData/d54f5ed9-2122-4479-a3d1-00c84d46323c>
   SvgIcon: ""
   Description: ""
   InternalVersion: 0
@@ -32,8 +32,8 @@
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
-    - remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
-      imageComponent: !<reference.Image> 00000000-0000-0000-0000-000000000000
+    - imageComponent: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}

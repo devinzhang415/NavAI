@@ -1,48 +1,12 @@
-- !<Material/006fd6a3-d422-4b54-a0a2-aba26ced780d>
+- !<Material/d3210e2d-7b93-4d0d-bf57-40861f0605e9>
   PackagePath: ""
   PassesInfo:
-    - !<own> e104c561-2d45-48ef-a36f-b46c324eb328
-- !<PassInfo/e104c561-2d45-48ef-a36f-b46c324eb328>
+    - !<own> a5717b33-7728-414e-ae50-8919d57d8226
+- !<PassInfo/a5717b33-7728-414e-ae50-8919d57d8226>
   CachedProperties:
-    - Port_Default_N204:
-        typeIdx: 1
-        value: 0.000000
     - Port_Default_N369:
         typeIdx: 5
         value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-    - PreviewEnabled:
-        typeIdx: 0
-        value: 0
-    - baseColor:
-        typeIdx: 5
-        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-    - baseTex:
-        typeIdx: 9
-        value:
-          id: 7837e9d3-698e-4b7f-b481-e666f120b9de
-          sampler:
-            filteringMode: Trilinear
-            wrapModeU: ClampToEdge
-            wrapModeV: ClampToEdge
-            wrapModeW: ClampToEdge
-            borderColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-            mipmaps: false
-          type: Texture2D
-    - baseTexTransform:
-        typeIdx: 7
-        value:
-          0: {x: 1.000000, y: 0.000000, z: 0.000000}
-          1: {x: 0.000000, y: 1.000000, z: 0.000000}
-          2: {x: 0.000000, y: 0.000000, z: 1.000000}
-    - overrideTimeDelta:
-        typeIdx: 1
-        value: 0.000000
-    - overrideTimeElapsed:
-        typeIdx: 1
-        value: 0.000000
-    - overrideTimeEnabled:
-        typeIdx: 0
-        value: 0
   DepthWrite: false
   DepthTest: false
   DepthFunction: LessEqual
@@ -54,11 +18,11 @@
   FrustumCullPad: 0.000000
   InstanceCount: 1
   Defines:
-    - ENABLE_BASE_TEX
     - NODE_13_DROPLIST_ITEM 0
     - NODE_27_DROPLIST_ITEM 0
     - NODE_49_DROPLIST_ITEM 0
     - NODE_69_DROPLIST_ITEM 0
+    - ENABLE_BASE_TEX
   BlendMode: PremultipliedAlphaAuto
   Properties:
     Port_Default_N204:
@@ -73,7 +37,7 @@
     baseTex:
       typeIdx: 9
       value:
-        id: 7837e9d3-698e-4b7f-b481-e666f120b9de
+        id: 5725b925-6e7b-4f46-aed1-e20a4626cd8a
         sampler:
           filteringMode: Trilinear
           wrapModeU: ClampToEdge
