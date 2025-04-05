@@ -16,5 +16,7 @@ tsconfig.json
 .DS_Store
 **/.DS_Store
 *.lock
+.env
+backend/
 
 # Shipped by Lens Studio
