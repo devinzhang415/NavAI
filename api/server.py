@@ -47,5 +47,10 @@ def gemini_ocr():
     words = response.text.split('\n')
     return jsonify({'words': words})
 
+@app.route('/speech_to_text', methods=['POST'])
+def speech_to_text():
+    print("Called on the server")
+    return jsonify({'words': ['hi', 'hello']})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
