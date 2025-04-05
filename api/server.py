@@ -36,14 +36,16 @@ def gemini_ocr():
     image_blob = request.files['image']
     # Read the image data
     image_data = image_blob.read()
+
+    google_maps_text = request.form['google_maps_info']
     
     client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
     response = client.models.generate_content(
         model='gemini-2.0-flash-exp',
         contents=['In this picture, are there any distinctive text? If so return ONLY the text, otherwise output "None"', types.Part.from_bytes(data=image_data, mime_type='image/jpeg')]
     )
-    print(response.text)
-    return jsonify({})
+    words = response.text.split('\n')
+    return jsonify({'words': words})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
