@@ -16,7 +16,6 @@ export class PinchController extends BaseScriptComponent {
     @input
     private popupController: PopupController;
     
-    
     private leftDown : boolean;
     private rightDown : boolean;
     private isClosed: boolean;

@@ -214,6 +214,55 @@ Your response must be just a single name from the list with nothing else. For ex
                 "error_type": error_type,
                 "response": None
             }
+            
+    def generate_place_description(self, place_name: str, maps_info: str) -> Dict:
+        """
+        Uses Gemini AI to generate a concise 3-sentence description about a place.
+        
+        Parameters:
+            place_name: The name of the place to describe
+            maps_info: Google Maps information about the place
+            
+        Returns:
+            A dictionary containing:
+                - 'success': Boolean indicating success of the API call
+                - 'description': The generated 3-sentence description
+                - 'error': Error message if any
+        """
+        try:
+            # Construct the prompt
+            prompt = f"""
+You are given information about a place called "{place_name}".
+Here is information from Google Maps about this place:
+{maps_info}
+
+Write exactly 3 sentences explaining:
+1. What this place is about
+2. Something interesting or cool about it
+3. Why someone might want to visit it
+
+Your response should ONLY contain the 3 sentences, with no additional text, introductions, or conclusions.
+"""
+            
+            # Make the API request
+            response = self.model.generate_content(prompt)
+            
+            # Return the description
+            return {
+                "success": True,
+                "description": response.text.strip(),
+                "error": None
+            }
+            
+        except Exception as e:
+            error_message = str(e)
+            print(f"Error generating place description: {error_message}")
+            
+            return {
+                "success": False,
+                "description": None,
+                "error": error_message
+            }
 
 # Example usage:
 # if __name__ == "__main__":
