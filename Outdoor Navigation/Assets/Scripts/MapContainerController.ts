@@ -179,11 +179,18 @@ export class MapContainerController extends BaseScriptComponent {
     if (isMiniMap) {
       this.mapComponent.centerMap();
 
-      const targetWorldPosition: vec3 = containerWorldPosition
-        .sub(this.cameraPos)
-        .normalize()
-        .uniformScale(CONTAINER_DISTANCE_MINI)
-        .add(this.cameraPos);
+      // Calculate position for top left corner
+      const cameraForward = this.cameraTransform.forward;
+      const cameraRight = this.cameraTransform.right;
+      const cameraUp = this.cameraTransform.up;
+      
+      // Position in the top left corner, slightly offset from the edge
+      const offset = 0.1; // Small offset from the edge
+      const targetWorldPosition = this.cameraPos
+        .add(cameraForward.uniformScale(CONTAINER_DISTANCE_MINI))
+        .add(cameraRight.uniformScale(-CONTAINER_DISTANCE_MINI * offset))
+        .add(cameraUp.uniformScale(CONTAINER_DISTANCE_MINI * offset))
+        .add(new vec3(0, this.containerYOffset, 0)); // Add vertical offset to match camera height
 
       this.tweenCancelFunction = makeTween((t) => {
         this.container.innerSize = vec2.lerp(

@@ -6,6 +6,7 @@
     - !<own> 00cca4cc-0c35-40f4-a25d-fbceea04a905
     - !<own> d1583ee4-a7ed-4727-a912-a62530c0984d
     - !<own> aa4c9644-7e91-4fd9-a405-4c02157e2375
+    - !<own> b2e6f14f-0145-4a1f-a73b-d06c24988de2
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
     userLayers:
       []
@@ -945,7 +946,6 @@
     - !<own> 0e7ff764-1256-429a-9fe2-5df6938a4b12
     - !<own> 7092955b-bc52-4f48-8f5f-cac6d25a0dd6
     - !<own> 2fd11cef-c9fd-466a-aaeb-2c6d6a047e0d
-    - !<own> b2e6f14f-0145-4a1f-a73b-d06c24988de2
     - !<own> 5a89f5e4-8d80-44ca-b2ec-483b1e316f16
     - !<own> a369f2c5-f52a-43ad-9fc1-833aff38598e
   Components:
@@ -1117,7 +1117,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: Bars
+  Text: 800m
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
@@ -1594,7 +1594,7 @@
     []
   Name: Render Mesh Visual
   Enabled: true
-  RenderOrder: 2
+  RenderOrder: 1
   StretchMode: Stretch
   VerticalAlignment: Center
   HorizontalAlignment: Center
@@ -4628,7 +4628,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 28.175400, y: 32.000000, z: 2.000000}
+    position: {x: 28.175400, y: 32.000000, z: -128.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -5634,7 +5634,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: Bars
+  Text: 400m
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
@@ -5935,7 +5935,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: Spawn Pin
+  Text: 100m
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
