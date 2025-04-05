@@ -26,14 +26,17 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    depth: false
     text: false
   ScriptTypesHidden:
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - text: !<string> N
+      depth: !<float> 2.000000
   ScriptTypes:
     -
       {}
   InputLines:
     - '// @input string text = "N"'
+    - // @input float depth = 2

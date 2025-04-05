@@ -20,7 +20,7 @@ const CENTER_MAP_BUTTON_OFFSET_FULL = new vec3(9, -32, 2);
 const TOGGLE_BUTTON_OFFSET_MINI = new vec3(-10, 10.5, 2);
 const TOGGLE_BUTTON_OFFSET_FULL = new vec3(-31, 32, 2);
 const RANGE_BUTTON_OFFSET_MINI = new vec3(10, 10.5, 2);
-const RANGE_BUTTON_OFFSET_FULL = new vec3(31, 32, 2);
+const RANGE_BUTTON_OFFSET_FULL = new vec3(-3, -32, 2);
 
 enum ButtonType {
   SPAWN_PIN,
