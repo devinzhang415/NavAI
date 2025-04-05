@@ -7,6 +7,9 @@
     - !<own> d1583ee4-a7ed-4727-a912-a62530c0984d
     - !<own> aa4c9644-7e91-4fd9-a405-4c02157e2375
     - !<own> f3d4aad6-b1c5-472f-a971-735bf489b276
+    - !<own> 202761d2-c037-4ef2-a391-b2b8fed91d2c
+    - !<own> b8f2204d-7128-47ff-a775-e69e2f45f9aa
+    - !<own> 87cdd506-03c1-42aa-8cbd-6c8ce21d4da6
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
     userLayers:
       []
@@ -663,6 +666,23 @@
   ForceCompound: false
   Intangible: false
   ShowCollider: false
+- !<ScriptComponent/0cce4c09-6437-4e3e-b7be-2e0252f17afc>
+  PrefabRemaps:
+    []
+  Name: PinchController
+  Enabled: true
+  ScriptAsset: !<reference> 0072cc52-5476-4dc0-9c13-6a3ecd5b70d7
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      mapComponent: !<MappingBased.MapComponent> c99d4f2c-f5f0-4683-bb28-e2bbf4c7ea40
+      uiImage: !<reference.Image> ca19472a-a01c-4230-a69a-db04aeb69519
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/0e7ff764-1256-429a-9fe2-5df6938a4b12>
   PrefabRemaps:
     []
@@ -881,6 +901,21 @@
     - !<own> 01dd1c60-8098-4833-915d-cf534d39b0c0
   Components:
     []
+- !<SceneObject/202761d2-c037-4ef2-a391-b2b8fed91d2c>
+  PrefabRemaps:
+    []
+  Name: Snapchat Places API API
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> fcd6e501-88f4-4efe-867b-0ada5a007786
 - !<SceneObject/220b3fc0-0de8-4c15-ad2d-09db6d6c86cd>
   PrefabRemaps:
     []
@@ -1525,6 +1560,22 @@
     - !<own> b6327642-b5a0-4701-98a3-b16757b781d1
   Components:
     []
+- !<ScriptComponent/3e465c14-437b-4086-ba9c-0a54da11946a>
+  PrefabRemaps:
+    []
+  Name: SnapPlacesController
+  Enabled: true
+  ScriptAsset: !<reference> dfb01b8d-f3de-4f18-a384-76d3d7a050ab
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      remoteServiceModule: !<reference.RemoteServiceModule> ed34df1b-9924-462e-bbaa-5d9aee712f5d
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/3ecbf086-f684-43d3-994d-7d6401c14343>
   PrefabRemaps:
     []
@@ -1967,8 +2018,8 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: -0.000002, z: 0.000000}
-    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
@@ -2663,21 +2714,6 @@
     - !<own> d770260f-499f-402e-bb44-fe74d3556db5
   Components:
     []
-- !<SceneObject/6d721393-3d61-40f5-adec-9fc119d20867>
-  PrefabRemaps:
-    []
-  Name: PinchDetector
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> d8ed3a09-531b-455e-bb20-6108da77a9e1
 - !<RenderMeshVisual/6ece2120-46a3-4b2c-b6a1-c97b455cc5cc>
   PrefabRemaps:
     []
@@ -3165,25 +3201,6 @@
     - !<own> 528daea4-f748-426d-bd59-b6635366bb94
   Components:
     []
-- !<Image/7a3ab2d2-bb07-4c32-9236-6f38dbb46c30>
-  PrefabRemaps:
-    []
-  Name: Image
-  Enabled: true
-  RenderOrder: 0
-  StretchMode: Fit
-  VerticalAlignment: Center
-  HorizontalAlignment: Center
-  MeshShadowMode: None
-  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-  ShadowDensity: 1.000000
-  Materials:
-    - !<reference> bc4825cd-8529-4260-b2c3-4cc8cfd44ac1
-  FlipX: false
-  FlipY: false
-  RotationAngle: 0
-  Pivot: {x: 0.000000, y: 0.000000}
-  ExtentsTarget: !<reference> 00000000-0000-0000-0000-000000000000
 - !<SceneObject/7b59c4b6-a12a-4a2b-b8f8-5b6231378d2e>
   PrefabRemaps:
     []
@@ -3438,6 +3455,21 @@
   ScriptTypes:
     "":
       {}
+- !<SceneObject/87cdd506-03c1-42aa-8cbd-6c8ce21d4da6>
+  PrefabRemaps:
+    []
+  Name: UIImage
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> ca19472a-a01c-4230-a69a-db04aeb69519
 - !<SceneObject/8973268c-2b61-4b58-b172-8df71b267dfa>
   PrefabRemaps:
     []
@@ -3931,21 +3963,6 @@
     []
   Components:
     - !<own> dcace8ac-cf9e-4ab2-bc68-ef8c43d1945b
-- !<SceneObject/95bfbac5-102a-468e-a896-b69ed8ba57a9>
-  PrefabRemaps:
-    []
-  Name: Camera
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> e7c3e80a-1f91-453e-bf5a-c4c14051fe97
 - !<ScriptComponent/966af6cb-97e8-46ea-bc83-711a7f15a3cb>
   PrefabRemaps:
     []
@@ -4951,6 +4968,23 @@
     - !<own> bfb5f952-c4a1-44b7-b0b8-d34aab541d0d
   Components:
     []
+- !<ScriptComponent/b11f4d69-2fee-46db-b29b-fa76d9bfcac4>
+  PrefabRemaps:
+    []
+  Name: geminiHandler
+  Enabled: true
+  ScriptAsset: !<reference> 1c3c8a43-3a20-4b93-8e19-d90a7d9423d0
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      imageComponent: !<reference.Image> ca19472a-a01c-4230-a69a-db04aeb69519
+      remoteServiceModule: !<reference.RemoteServiceModule> ed34df1b-9924-462e-bbaa-5d9aee712f5d
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/b2e6f14f-0145-4a1f-a73b-d06c24988de2>
   PrefabRemaps:
     []
@@ -5075,6 +5109,23 @@
   ScriptTypes:
     "":
       {}
+- !<SceneObject/b8f2204d-7128-47ff-a775-e69e2f45f9aa>
+  PrefabRemaps:
+    []
+  Name: PinchController
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 0cce4c09-6437-4e3e-b7be-2e0252f17afc
+    - !<own> b11f4d69-2fee-46db-b29b-fa76d9bfcac4
+    - !<own> 3e465c14-437b-4086-ba9c-0a54da11946a
 - !<SceneObject/b8f4bf2b-a010-4b8c-af1d-1ec283c4dbd2>
   PrefabRemaps:
     []
@@ -5528,6 +5579,25 @@
   ForceCompound: false
   Intangible: false
   ShowCollider: false
+- !<Image/ca19472a-a01c-4230-a69a-db04aeb69519>
+  PrefabRemaps:
+    []
+  Name: Image
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Fit
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> d3210e2d-7b93-4d0d-bf57-40861f0605e9
+  FlipX: false
+  FlipY: false
+  RotationAngle: 0
+  Pivot: {x: 0.000000, y: 0.000000}
+  ExtentsTarget: !<reference> 00000000-0000-0000-0000-000000000000
 - !<ScriptComponent/cbb08175-e7c5-4abb-be36-50e65c950d07>
   PrefabRemaps:
     []
@@ -5916,22 +5986,6 @@
     - !<own> 945f3908-b4d6-44d2-af1e-2571f0c6f7f4
   Components:
     []
-- !<ScriptComponent/d8ed3a09-531b-455e-bb20-6108da77a9e1>
-  PrefabRemaps:
-    []
-  Name: PinchController
-  Enabled: true
-  ScriptAsset: !<reference> 0072cc52-5476-4dc0-9c13-6a3ecd5b70d7
-  ScriptInputsDefault:
-    {}
-  ScriptTypesDefault:
-    {}
-  ScriptInputs:
-    "":
-      uiImage: !<reference.Image> 7a3ab2d2-bb07-4c32-9236-6f38dbb46c30
-  ScriptTypes:
-    "":
-      {}
 - !<SceneObject/d9e6904e-ddc0-4600-8832-813337a9d9a2>
   PrefabRemaps:
     []
@@ -6375,21 +6429,6 @@
     - !<own> 04c20b2b-cddc-4ee5-a1c8-813d4d48f850
   Components:
     []
-- !<SceneObject/e0d5b53f-1a3b-4b5f-bb34-29c4713b4eda>
-  PrefabRemaps:
-    []
-  Name: PinchImage
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: -5.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 5.000000, y: 5.000000, z: 5.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> 7a3ab2d2-bb07-4c32-9236-6f38dbb46c30
 - !<SceneObject/e304f3d9-f504-4257-9bde-03a80af1b1ae>
   PrefabRemaps:
     []
@@ -6475,36 +6514,6 @@
     - !<own> 3e45aeb5-39df-4d2e-a3e8-a3e806926517
   Components:
     []
-- !<Camera/e7c3e80a-1f91-453e-bf5a-c4c14051fe97>
-  PrefabRemaps:
-    []
-  Name: Camera
-  Enabled: true
-  renderLayer: 1
-  MipmapLevel: 0
-  RenderOrder: 0
-  Size: 20.000000
-  Near: 1.000000
-  Far: 1000.000000
-  Fov: 63.541019
-  ClearColor: !<CameraClearColor>
-    Mode: None
-    Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
-    InputTexture: !<reference> 00000000-0000-0000-0000-000000000000
-  ClearDepth: !<CameraClearDepth>
-    Mode: Value
-    Value: 1.000000
-    InputTexture: !<reference> 00000000-0000-0000-0000-000000000000
-  Aspect: 1.000000
-  CameraType: Perspective
-  DepthMode: Regular
-  DeviceProperty: All
-  AspectPreset: Custom
-  OitLayers: NoOit
-  RenderTarget: !<reference> 00000000-0000-0000-0000-000000000000
-  DepthStencilRenderTarget: !<reference> 00000000-0000-0000-0000-000000000000
-  MaskTexture: !<reference> 00000000-0000-0000-0000-000000000000
-  RayTracing: !<reference> 00000000-0000-0000-0000-000000000000
 - !<SceneObject/e9430530-5c33-4680-b00d-417c0527c4b1>
   PrefabRemaps:
     []
@@ -7224,6 +7233,22 @@
     - !<own> ee813fe1-e7af-4f39-9545-48ab7c13a414
   Components:
     []
+- !<ScriptComponent/fcd6e501-88f4-4efe-867b-0ada5a007786>
+  PrefabRemaps:
+    []
+  Name: Snapchat Places API API
+  Enabled: true
+  ScriptAsset: !<reference> 3ffe47bb-d5fa-4e04-af15-675aff382e33
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      remoteServiceModule: !<reference.RemoteServiceModule> fb78c99e-2bd3-4a89-99fe-5e222d2f2f54
+  ScriptTypes:
+    "":
+      {}
 - !<RenderMeshVisual/fda22202-45d2-4777-9adb-d634fcdbd1c0>
   PrefabRemaps:
     []

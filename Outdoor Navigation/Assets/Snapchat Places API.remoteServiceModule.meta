@@ -1,8 +1,8 @@
-- !<AssetImportMetadata/af7c2497-8b9a-4a41-a409-d8a285c0a8ca>
+- !<AssetImportMetadata/4b6cc332-821f-4644-a398-9885d536c296>
   ImportedAssetIds:
-    Material: !<reference> 006fd6a3-d422-4b54-a0a2-aba26ced780d
-  ImporterName: MaterialImporter
-  PrimaryAsset: !<reference> 006fd6a3-d422-4b54-a0a2-aba26ced780d
+    RemoteServiceModule: !<reference> fb78c99e-2bd3-4a89-99fe-5e222d2f2f54
+  ImporterName: RemoteServiceModuleImporter
+  PrimaryAsset: !<reference> fb78c99e-2bd3-4a89-99fe-5e222d2f2f54
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:
