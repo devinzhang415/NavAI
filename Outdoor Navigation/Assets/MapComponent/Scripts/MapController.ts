@@ -853,6 +853,15 @@ export class MapController extends BaseScriptComponent {
    * Setting a new location for the map
    */
   private setNewMapLocation(location: GeoPosition): void {
+    // Add logging for coordinates
+    print(`Latitude: ${location.latitude}, Longitude: ${location.longitude}`);
+    
+    // Check for invalid coordinates
+    if (location.latitude === 0 && location.longitude === 0) {
+      log.e("Invalid coordinates detected (0,0). Please check location services.");
+      return;
+    }
+
     this.mapLocation = location;
     this.pinOffsetter.bindScreenTransformToLocation(
       this.mapPinsAnchor.getComponent("ScreenTransform"),

@@ -8,7 +8,9 @@ export let NEARBY_PLACES_FILTER = ["Coffee", "Bar", "Restaurant"];
 export let NEARBY_PLACES_LIMIT = 20;
 
 export function setNearbyPlacesRange(newRange: number) {
+  print(`Setting nearby places range from ${NEARBY_PLACES_RANGE}m to ${newRange}m`);
   NEARBY_PLACES_RANGE = newRange;
+  print(`New nearby places range: ${NEARBY_PLACES_RANGE}m`);
 }
 
 export function setNearbyPlacesFilter(newFilter: string[]) {

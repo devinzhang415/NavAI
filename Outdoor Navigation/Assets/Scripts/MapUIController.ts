@@ -201,7 +201,8 @@ export class MapUIController extends BaseScriptComponent {
       return;
     }
 
-    log.i("Toggling minimap " + isOn);
+    print("Toggling minimap " + isOn);
+    print(`Range button enabled state before: ${this.rangeSelectionButton.sceneObject.enabled}`);
 
     this.mapComponent.toggleMiniMap(isOn);
     if (this.tweenCancelFunction !== undefined) {
@@ -267,6 +268,8 @@ export class MapUIController extends BaseScriptComponent {
           this.showBarsButton.sceneObject.enabled = true;
           this.showRestaurantsButton.sceneObject.enabled = true;
           this.rangeSelectionButton.sceneObject.enabled = true;
+          print(`Range button enabled state after: ${this.rangeSelectionButton.sceneObject.enabled}`);
+          print(`Range button position: ${this.buttonTransforms[ButtonType.RANGE_SELECTION].getLocalPosition()}`);
         }
       }, TWEEN_DURATION);
     }
