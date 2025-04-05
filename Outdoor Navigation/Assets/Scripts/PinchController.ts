@@ -1,6 +1,6 @@
 import { SIK } from "SpectaclesInteractionKit/SIK";
 import { MapComponent } from "../MapComponent/Scripts/MapComponent";
-
+import { PopupController } from "./PopupController"
 
 @component
 export class PinchController extends BaseScriptComponent {
@@ -11,6 +11,10 @@ export class PinchController extends BaseScriptComponent {
     
     @input
     private mapComponent: MapComponent;
+    
+    // New input to reference the PopupController component.
+    @input
+    private popupController: PopupController;
     
     
     private leftDown : boolean;
@@ -60,15 +64,19 @@ export class PinchController extends BaseScriptComponent {
                 let cameraRequest = CameraModule.createCameraRequest();           
                 let cameraTexture = cameraModule.requestCamera(cameraRequest);
                 this.uiImage.mainPass.baseTex = cameraTexture
-                    
+                // Update the popup with the desired values.
+                if (this.popupController) {
+                    this.popupController.toggleFrame();
+                    this.popupController.updateInfo("krish", "hello guys");
+                }
                 
                 // Run Fetch to find the right location, and pull that locations x, y 
                 
-                let x = 0;
-                let y = 0;
-                const position = new vec2(x, y);
-
-                this.mapComponent.addPinByLocalPosition(position)
+//                let x = 0;
+//                let y = 0;
+//                const position = new vec2(x, y);
+//
+//                this.mapComponent.addPinByLocalPosition(position)
                 
             
             // this.mapComponent.addPinByLocalPosition(vec2.zero());

@@ -198,7 +198,7 @@
 - !<SceneObject/0075c3b5-66c7-4366-8975-9b5e0258801e>
   PrefabRemaps:
     []
-  Name: Text
+  Name: Name
   Enabled: true
   Layers: 1
   LocalTransform:
@@ -637,7 +637,7 @@
   PrefabRemaps:
     []
   Name: Image
-  Enabled: true
+  Enabled: false
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 11.000000, z: 5.000000}
@@ -679,6 +679,7 @@
   ScriptInputs:
     "":
       mapComponent: !<MappingBased.MapComponent> c99d4f2c-f5f0-4683-bb28-e2bbf4c7ea40
+      popupController: !<MappingBased.PopupController> 51e9fa2b-c8e3-4cb0-a632-e319340d39c9
       uiImage: !<reference.Image> ca19472a-a01c-4230-a69a-db04aeb69519
   ScriptTypes:
     "":
@@ -2097,6 +2098,23 @@
   ScriptTypes:
     "":
       {}
+- !<ScriptComponent/51e9fa2b-c8e3-4cb0-a632-e319340d39c9>
+  PrefabRemaps:
+    []
+  Name: PopupController
+  Enabled: true
+  ScriptAsset: !<reference> 34f56a42-38ca-46a3-befb-4c15d88c2602
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      nameComponent: !<reference.Text> 819ddbda-6e50-49e9-b02e-80d326d23a6e
+      infoComponent: !<reference.Text> a00606bf-9589-4677-8d0d-af91e8630184
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/528daea4-f748-426d-bd59-b6635366bb94>
   PrefabRemaps:
     []
@@ -2329,7 +2347,7 @@
 - !<SceneObject/5fafd29a-7284-4902-ba2d-88996b64c3ef>
   PrefabRemaps:
     []
-  Name: Text
+  Name: Info
   Enabled: true
   Layers: 1
   LocalTransform:
@@ -5126,6 +5144,7 @@
     - !<own> 0cce4c09-6437-4e3e-b7be-2e0252f17afc
     - !<own> b11f4d69-2fee-46db-b29b-fa76d9bfcac4
     - !<own> 3e465c14-437b-4086-ba9c-0a54da11946a
+    - !<own> 51e9fa2b-c8e3-4cb0-a632-e319340d39c9
 - !<SceneObject/b8f4bf2b-a010-4b8c-af1d-1ec283c4dbd2>
   PrefabRemaps:
     []
@@ -6975,7 +6994,7 @@
   PrefabRemaps:
     []
   Name: Popup
-  Enabled: false
+  Enabled: true
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: -5.000000, z: -65.000000}

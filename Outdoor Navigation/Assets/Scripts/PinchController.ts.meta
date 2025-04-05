@@ -27,6 +27,7 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     mapComponent: false
+    popupController: false
     uiImage: false
   ScriptTypesHidden:
     {}
@@ -34,9 +35,11 @@
   DefaultScriptInputs:
     - uiImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
       mapComponent: !<MappingBased.MapComponent> 00000000-0000-0000-0000-000000000000
+      popupController: !<MappingBased.PopupController> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input MapComponent mapComponent
+    - // @input PopupController popupController
     - // @input Component.Image uiImage
