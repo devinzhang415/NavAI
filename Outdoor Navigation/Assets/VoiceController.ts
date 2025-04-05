@@ -63,9 +63,9 @@ export class VoiceController extends BaseScriptComponent {
     private _recordingDuration: number = 0;
 
     private currentPlaybackTime: number = 0;
+    private iterations: number = 0;
 
     onAwake() {
-        print("onAwake() called");
         // Initialize microphone control and set sample rate
         this.microphoneControl = this.microphoneAsset
         .control as MicrophoneAudioProvider;
@@ -90,6 +90,7 @@ export class VoiceController extends BaseScriptComponent {
             this.onPlaybackAudio();
         });
         this.playbackAudioUpdateEvent.enabled = false;
+        this.iterations = 0;
     }
 
     async sendAudioForRecognition() {
@@ -121,39 +122,38 @@ export class VoiceController extends BaseScriptComponent {
             int16Audio[i] = Math.max(-32768, Math.min(32767, Math.floor(combinedAudio[i] * 32767)));
         }
         
-        // Convert to base64 for transmission (if needed)
-        const audioArrayBuffer = int16Audio.buffer;
-        const base64Audio = arrayBufferToBase64(audioArrayBuffer);
-        const OPENAI_API_KEY = '';
         // Send the audio data to your speech recognition API
         try {
-            const payload = {
-                model: "whisper-1",
-                file: base64Audio,
-                response_format: "text"
-            };
-
-            let request = new Request('https://api.openai.com/v1/audio/transcriptions', {
+           const google_api_key = 'AIzaSyAZvjI98_CY3XPnVlPgCuI0Z3i3YgehhZ0';
+           const stringSound = arrayBufferToBase64(int16Audio);
+           const request = new Request(`https://speech.googleapis.com/v1/speech:recognize?key=${google_api_key}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
                     'Content-Type': 'application/json'
-                    // Add any API keys or auth headers here
                 },
-                body: JSON.stringify(payload)
-            });
+                body: JSON.stringify({
+                    'config': {
+                        'encoding': 'FLAC',
+                        'sampleRateHertz': 16000,
+                        'languageCode': 'en-US'
+                    },
+                    'audio': {
+                        'content': stringSound
+                    }
+                })
+           });
 
-            const response = await this.remoteServiceModule.fetch(request);
+            
+            let response = await this.remoteServiceModule.fetch(request);
             if (!response.ok) {
-                const errorData = await response.json();
-                print(`API error: ${JSON.stringify(errorData)}`);
+                print(response.status)
             }
 
-            const result = await response.json();
-            print("Speech recognition result: " + result);
-            return result;
+            const responseText = await response.json();
+            print("Received response text " + responseText['results']);
+            print("hmm okay")
         } catch (error) {
-            print("Error sending audio for recognition: " + error);
+            print("Error sending audio for recognition: " + JSON.stringify(error));
             return null;
         }
     }
@@ -186,7 +186,13 @@ export class VoiceController extends BaseScriptComponent {
             audioFrame: audioFrame,
             audioFrameShape: audioFrameShape,
         });
-        this.sendAudioForRecognition();
+
+        if (this.iterations == 35) {
+            this.sendAudioForRecognition();
+            this.iterations = 0;
+        }
+        this.iterations += 1;
+        print("HIHIHIHIHIHI");
     }
 
     // Called to handle playback of recorded audio
@@ -225,13 +231,13 @@ export class VoiceController extends BaseScriptComponent {
                 "Oops! \nNo audio has been recorded yet. Please try recording again.";
             return;
         }
-
-        this.debugText.text = "Playback Time: \n";
-        this.debugText.text +=
-        this.currentPlaybackTime.toFixed(1) +
-        "s / " +
-        this._recordingDuration.toFixed(1) +
-        "s";
+        
+        // this.debugText.text = "Playback Time: \n";
+        // this.debugText.text +=
+        // this.currentPlaybackTime.toFixed(1) +
+        // "s / " +
+        // this._recordingDuration.toFixed(1) +
+        // "s";
     }
 
     // Start or stop recording audio from the microphone
@@ -246,6 +252,7 @@ export class VoiceController extends BaseScriptComponent {
         } else {
             this.microphoneControl.stop();
             this.recordAudioUpdateEvent.enabled = false;
+            this.sendAudioForRecognition();
         }
     }
 
