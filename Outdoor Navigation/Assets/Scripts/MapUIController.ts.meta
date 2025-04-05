@@ -30,6 +30,10 @@
     clearPinsButton: false
     logObject: false
     mapComponent: false
+    range100Button: false
+    range400Button: false
+    range800Button: false
+    rangeSelectionButton: false
     showBarsButton: false
     showCafeButton: false
     showRestaurantsButton: false
@@ -51,6 +55,10 @@
       showCafeButton: !<MappingBased.ToggleButton> 00000000-0000-0000-0000-000000000000
       showBarsButton: !<MappingBased.PinchButton> 00000000-0000-0000-0000-000000000000
       clearPinsButton: !<MappingBased.PinchButton> 00000000-0000-0000-0000-000000000000
+      rangeSelectionButton: !<MappingBased.PinchButton> 00000000-0000-0000-0000-000000000000
+      range100Button: !<MappingBased.PinchButton> 00000000-0000-0000-0000-000000000000
+      range400Button: !<MappingBased.PinchButton> 00000000-0000-0000-0000-000000000000
+      range800Button: !<MappingBased.PinchButton> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -65,5 +73,9 @@
     - // @input PinchButton showRestaurantsButton
     - // @input PinchButton showCafeButton
     - // @input PinchButton showBarsButton
+    - // @input PinchButton rangeSelectionButton
+    - // @input PinchButton range100Button
+    - // @input PinchButton range400Button
+    - // @input PinchButton range800Button
     - // @input SceneObject logObject
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000

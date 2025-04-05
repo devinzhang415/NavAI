@@ -2,6 +2,7 @@
 const placesModule = require("./Snapchat Places API Module");
 
 import { getPhysicalDistanceBetweenLocations } from "./MapUtils";
+import { NEARBY_PLACES_RANGE, NEARBY_PLACES_FILTER, NEARBY_PLACES_LIMIT } from "./PlacesConfig";
 
 export type Address = {
   street_address: string;
@@ -60,82 +61,86 @@ export class SnapPlacesProvider extends BaseScriptComponent {
   }
 
   getNearbyPlacesInfo(
-    location: GeoPosition,
-    numberNearbyPlaces: number,
-    nearbyDistanceThreshold: number,
-    filter: string[] = null
-  ): Promise<PlaceInfo[]> {
-    if (location.latitude === 0 && location.longitude === 0) {
-      return new Promise((resolve) => {
-        resolve([]);
-      });
+      location: GeoPosition,
+      numberNearbyPlaces?: number,
+      nearbyDistanceThreshold?: number,
+      filter?: string[]
+    ): Promise<PlaceInfo[]> {
+      // If numberNearbyPlaces or filter are not provided, use the defaults
+      numberNearbyPlaces = numberNearbyPlaces ?? NEARBY_PLACES_LIMIT;
+      filter = filter ?? NEARBY_PLACES_FILTER;
+      
+      if (location.latitude === 0 && location.longitude === 0) {
+        return Promise.resolve([]);
+      }
+      
+      const nearbyPlaces = this.getNearbyPlacesFromCache(location, nearbyDistanceThreshold);
+      if (nearbyPlaces !== null) {
+        return Promise.resolve(nearbyPlaces);
+      } else {
+        return new Promise((resolve, reject) => {
+          this.getNearbyPlaces(location, numberNearbyPlaces, filter)
+            .then((places) => {
+              this.getPlacesInfo(places)
+                .then((placesInfo) => {
+                  this.locationToPlaces.set(location, placesInfo);
+                  resolve(placesInfo);
+                })
+                .catch((error) => {
+                  reject(`Error getting places info: ${error}`);
+                });
+            })
+            .catch((error) => {
+              reject(`Error getting nearby places: ${error}`);
+            });
+        });
+      }
     }
-    const nearbyPlaces = this.getNearbyPlacesFromCache(
-      location,
-      nearbyDistanceThreshold
-    );
-    if (nearbyPlaces !== null) {
-      return new Promise((resolve) => {
-        resolve(nearbyPlaces);
-      });
-    } else {
+    
+    getNearbyPlaces(
+      location: GeoPosition,
+      numberNearbyPlaces?: number,
+      filter?: string[]
+    ): Promise<any[]> {
+      // Use defaults if the parameters are omitted
+      const placesLimit = numberNearbyPlaces ?? NEARBY_PLACES_LIMIT;
+      const categoryFilter = filter ?? NEARBY_PLACES_FILTER;
+    
       return new Promise((resolve, reject) => {
-        this.getNearbyPlaces(location, numberNearbyPlaces, filter)
-          .then((places) => {
-            this.getPlacesInfo(places)
-              .then((places) => {
-                this.locationToPlaces.set(location, places);
-                resolve(places);
-              })
-              .catch((error) => {
-                reject(`Error getting places info: ${error}`);
+        this.apiModule
+          .get_nearby_places({
+            parameters: {
+              lat: location.latitude.toString(),
+              lng: location.longitude.toString(),
+              gps_accuracy_m: NEARBY_PLACES_RANGE.toString(),
+              places_limit: placesLimit.toString(),
+            },
+          })
+          .then((response) => {
+            const results = response.bodyAsJson();
+            if (categoryFilter !== null) {
+              const places: any[] = [];
+              (results.nearbyPlaces as any[]).forEach((place) => {
+                const categoryName = place.categoryName as string;
+                // Filter the places based on the provided filter list
+                for (let i = 0; i < categoryFilter.length; i++) {
+                  if (categoryName.includes(categoryFilter[i])) {
+                    places.push(place);
+                    break;
+                  }
+                }
               });
+              resolve(places);
+            } else {
+              resolve(results.nearbyPlaces);
+            }
           })
           .catch((error) => {
-            reject(`Error getting nearby places: ${error}`);
+            reject(`Error retrieving nearby places: ${error}`);
           });
       });
     }
-  }
-
-  getNearbyPlaces(
-    location: GeoPosition,
-    numberNearbyPlaces: number,
-    filter: string[] = null
-  ): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.apiModule
-        .get_nearby_places({
-          parameters: {
-            lat: location.latitude.toString(),
-            lng: location.longitude.toString(),
-            gps_accuracy_m: "100",
-            places_limit: numberNearbyPlaces.toString(),
-          },
-        })
-        .then((response) => {
-          const results = response.bodyAsJson();
-          if (filter !== null) {
-            const places: any[] = [];
-            (results.nearbyPlaces as any[]).forEach((place) => {
-              const categoryName = place.categoryName as string;
-              for (let i = 0; i < filter.length; i++) {
-                if (categoryName.includes(filter[i])) {
-                  places.push(place);
-                  break;
-                }
-              }
-            });
-            resolve(places);
-          } else {
-            resolve(results.nearbyPlaces);
-          }
-        })
-        .catch((error) => {
-          reject(`Error retrieving nearby places: ${error}`);
-        });
-    });
-  }
+    
 
   getPlacesInfo(places: any[]): Promise<PlaceInfo[]> {
     return new Promise((resolve, reject) => {

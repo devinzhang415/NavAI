@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 import os
 from dotenv import load_dotenv
@@ -39,6 +40,7 @@ def health_check():
         "message": "API is running",
         "apis_loaded": apis_loaded
     })
+
 
 @app.route('/get_place_info', methods=['POST'])
 def get_place_info():
@@ -224,6 +226,27 @@ def test_gemini_direct():
             "message": f"Error testing Gemini API directly: {str(e)}",
             "trace": str(e)
         }), 500
+
+@app.route('/gemini_ocr', methods=['POST'])
+def gemini_ocr():
+    # Get the image from the request
+
+    if 'image' not in request.files:
+        return jsonify({"error": "No image provided"}), 400
+    
+    image_blob = request.files['image']
+    # Read the image data
+    image_data = image_blob.read()
+
+    google_maps_text = request.form['google_maps_info']
+    
+    client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+    response = client.models.generate_content(
+        model='gemini-2.0-flash-exp',
+        contents=['In this picture, are there any distinctive text? If so return ONLY the text, otherwise output "None"', types.Part.from_bytes(data=image_data, mime_type='image/jpeg')]
+    )
+    words = response.text.split('\n')
+    return jsonify({'words': words})
 
 if __name__ == '__main__':
     # Use the PORT environment variable provided by Heroku, or default to 5000
