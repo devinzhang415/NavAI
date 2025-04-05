@@ -4,30 +4,32 @@
 const Module = require("../Snapchat Places API API Module");
 const ApiModule = new Module.ApiModule(script.remoteServiceModule);
 
+import { NEARBY_PLACES_LIMIT } from "./PlacesConfig";
+
 /**
  * Place retrieval utilities
  */
 const PlacesAPI = {
-    // Get information about a specific place by ID
-    getPlaceById: function(placeId) {
-        print("Fetching place with ID: " + placeId);
-        return ApiModule.get_place({
-            parameters: {
-                "place_id": placeId
-            }
-        }).then((response) => {
-            print("Place details retrieved successfully");
-            const placeData = response.bodyAsJson();
-            print("Place data: " + JSON.stringify(placeData, null, 2));
-            return placeData;
-        }).catch((error) => {
-            print("Error fetching place: " + error);
-            throw error;
-        });
-    },
+    // // Get information about a specific place by ID
+    // getPlaceById: function(placeId) {
+    //     print("Fetching place with ID: " + placeId);
+    //     return ApiModule.get_place({
+    //         parameters: {
+    //             "place_id": placeId
+    //         }
+    //     }).then((response) => {
+    //         print("Place details retrieved successfully");
+    //         const placeData = response.bodyAsJson();
+    //         print("Place data: " + JSON.stringify(placeData, null, 2));
+    //         return placeData;
+    //     }).catch((error) => {
+    //         print("Error fetching place: " + error);
+    //         throw error;
+    //     });
+    // },
     
     // Get nearby places based on coordinates
-    getNearbyPlaces: function(latitude, longitude, accuracy = 10, limit = 10) {
+    getNearbyPlaces: function(latitude, longitude, accuracy = 10, limit = NEARBY_PLACES_LIMIT) {
         print("Finding places near: " + latitude + ", " + longitude);
         return ApiModule.get_nearby_places({
             parameters: {
@@ -131,4 +133,7 @@ function onAwake() {
 }
 
 // Execute the onAwake function when script initializes
+
+module.exports = PlacesAPI;
+
 onAwake();
