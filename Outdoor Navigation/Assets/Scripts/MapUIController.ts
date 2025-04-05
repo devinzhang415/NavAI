@@ -8,7 +8,6 @@ import { ToggleButton } from "../SpectaclesInteractionKit/Components/UI/ToggleBu
 import { InteractorEvent } from "../SpectaclesInteractionKit/Core/Interactor/InteractorEvent";
 import { CancelFunction } from "../SpectaclesInteractionKit/Utils/animate";
 import NativeLogger from "../SpectaclesInteractionKit/Utils/NativeLogger";
-import { setNearbyPlacesRange } from "../MapComponent/Scripts/PlacesConfig";
 
 export const TWEEN_DURATION = 0.3;
 const ZOOM_IN_BUTTON_OFFSET_MINI = new vec3(7, -9.5, 2);
@@ -110,10 +109,6 @@ export class MapUIController extends BaseScriptComponent {
     this.rangeSelectionButton.onButtonPinched.add(
       this.handleRangeSelectionButtonPinched.bind(this)
     );
-    this.range100Button.onButtonPinched.add(() => this.handleSetRangeButtonPinched(100));
-    this.range400Button.onButtonPinched.add(() => this.handleSetRangeButtonPinched(400));
-    this.range800Button.onButtonPinched.add(() => this.handleSetRangeButtonPinched(800));
-
     this.showCafeButton.onButtonPinched.add(
       this.handleShowCafeButtonPinched.bind(this)
     );
@@ -287,11 +282,6 @@ export class MapUIController extends BaseScriptComponent {
 
   private handleShowRestaurantsButtonPinched(event: InteractorEvent) {
     this.mapComponent.showNeaybyPlaces(["Restaurant"]);
-  }
-
-  private handleSetRangeButtonPinched(range: number) {
-    setNearbyPlacesRange(range);
-    this.hideRangeDropdown();
   }
 
   private toggleRangeDropdown() {
