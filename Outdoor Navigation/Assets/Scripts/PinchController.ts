@@ -1,14 +1,18 @@
 import { SIK } from "SpectaclesInteractionKit/SIK";
+import { MapComponent } from "../MapComponent/Scripts/MapComponent";
+
 
 @component
 export class PinchController extends BaseScriptComponent {
     private rightHand = SIK.HandInputData.getHand("right");
     private leftHand = SIK.HandInputData.getHand("left");
     private cameraModule: CameraModule = require('LensStudio:CameraModule');
-//    private cameraRequest: CameraModule.CameraRequest;
     private cameraTexture: Texture;
-//    private cameraTextureProvider: CameraTextureProvider;
-
+    
+    @input
+    private mapComponent: MapComponent;
+    
+    
     private leftDown : boolean;
     private rightDown : boolean;
     private isClosed: boolean;
@@ -37,27 +41,9 @@ export class PinchController extends BaseScriptComponent {
             this.rightDown = false;
         })
         
-//        this.createEvent('OnStartEvent').bind(() => {
-//          this.cameraRequest = CameraModule.createCameraRequest();
-//          this.cameraRequest.cameraId = CameraModule.CameraId.Default_Color;
-//    
-//          this.cameraTexture = this.cameraModule.requestCamera(this.cameraRequest);
-//          this.cameraTextureProvider = this.cameraTexture
-//            .control as CameraTextureProvider;
-//    
-//          this.cameraTextureProvider.onNewFrame.add((cameraFrame) => {
-//            if (this.uiImage) {
-//              this.uiImage.mainPass.baseTex = this.cameraTexture;
-//            }
-//          });
-//        });
     }
     
     private update() {
-//        print('update called');
-//        print(this.isClosed);
-//        print(this.rightDown);
-//        print(this.leftDown);
         if (!this.isClosed) {
             // if open and both are down then set to close
             if (this.rightDown && this.leftDown) {
@@ -68,15 +54,24 @@ export class PinchController extends BaseScriptComponent {
             // If closed, and both fingers are up then open
             if (!this.rightDown && !this.leftDown) {
                 this.isClosed = false;
-                print("ACTION")
+                print("here is when we call the function")
                 
-             let cameraModule = require('LensStudio:CameraModule');
-             let cameraRequest = CameraModule.createCameraRequest();
-//             cameraRequest.id = CameraModule.CameraId.Left_Color;
-//                
+                let cameraModule = require('LensStudio:CameraModule');
+                let cameraRequest = CameraModule.createCameraRequest();           
                 let cameraTexture = cameraModule.requestCamera(cameraRequest);
-                print(typeof(cameraTexture))
-                this.uiImage.mainPass.baseTex = cameraTexture      
+                this.uiImage.mainPass.baseTex = cameraTexture
+                    
+                
+                // Run Fetch to find the right location, and pull that locations x, y 
+                
+                let x = 0;
+                let y = 0;
+                const position = new vec2(x, y);
+
+                this.mapComponent.addPinByLocalPosition(position)
+                
+            
+            // this.mapComponent.addPinByLocalPosition(vec2.zero());
             }
         }
         
