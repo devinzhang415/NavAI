@@ -1,3 +1,5 @@
+require("LensStudio:RawLocationModule");
+
 import { MapComponent } from "../MapComponent/Scripts/MapComponent";
 import { makeTween } from "../MapComponent/Scripts/MapUtils";
 import { ContainerFrame } from "../SpectaclesInteractionKit/Components/UI/ContainerFrame/ContainerFrame";
@@ -6,6 +8,7 @@ import { ToggleButton } from "../SpectaclesInteractionKit/Components/UI/ToggleBu
 import { InteractorEvent } from "../SpectaclesInteractionKit/Core/Interactor/InteractorEvent";
 import { CancelFunction } from "../SpectaclesInteractionKit/Utils/animate";
 import NativeLogger from "../SpectaclesInteractionKit/Utils/NativeLogger";
+import { setNearbyPlacesRange } from "../MapComponent/Scripts/PlacesConfig";
 
 export const TWEEN_DURATION = 0.3;
 const ZOOM_IN_BUTTON_OFFSET_MINI = new vec3(7, -9.5, 2);
@@ -16,6 +19,8 @@ const CENTER_MAP_BUTTON_OFFSET_MINI = new vec3(0, -10, 2);
 const CENTER_MAP_BUTTON_OFFSET_FULL = new vec3(9, -32, 2);
 const TOGGLE_BUTTON_OFFSET_MINI = new vec3(-10, 10.5, 2);
 const TOGGLE_BUTTON_OFFSET_FULL = new vec3(-31, 32, 2);
+const RANGE_BUTTON_OFFSET_MINI = new vec3(10, 10.5, 2);
+const RANGE_BUTTON_OFFSET_FULL = new vec3(31, 32, 2);
 
 enum ButtonType {
   SPAWN_PIN,
@@ -27,6 +32,7 @@ enum ButtonType {
   SHOW_CAFE,
   SHOW_BARS,
   SHOW_RESTAURANTS,
+  RANGE_SELECTION,
 }
 
 const TAG = "[MapUIController]";
@@ -57,6 +63,14 @@ export class MapUIController extends BaseScriptComponent {
   private showCafeButton: PinchButton;
   @input
   private showBarsButton: PinchButton;
+  @input
+  private rangeSelectionButton: PinchButton;
+  @input
+  private range100Button: PinchButton;
+  @input
+  private range400Button: PinchButton;
+  @input
+  private range800Button: PinchButton;
 
   // For debugging
   @input
@@ -68,6 +82,7 @@ export class MapUIController extends BaseScriptComponent {
   private isMiniMap: boolean = true;
 
   private tweenCancelFunction: CancelFunction;
+  private rangeDropdownVisible: boolean = false;
 
   onAwake() {
     this.createEvent("OnStartEvent").bind(this.onStart.bind(this));
@@ -92,6 +107,12 @@ export class MapUIController extends BaseScriptComponent {
     this.toggleMiniMapButton.onStateChanged.add(
       this.handleToggleMiniMapButtonPinched.bind(this)
     );
+    this.rangeSelectionButton.onButtonPinched.add(
+      this.handleRangeSelectionButtonPinched.bind(this)
+    );
+    this.range100Button.onButtonPinched.add(() => this.handleSetRangeButtonPinched(100));
+    this.range400Button.onButtonPinched.add(() => this.handleSetRangeButtonPinched(400));
+    this.range800Button.onButtonPinched.add(() => this.handleSetRangeButtonPinched(800));
 
     this.showCafeButton.onButtonPinched.add(
       this.handleShowCafeButtonPinched.bind(this)
@@ -114,6 +135,10 @@ export class MapUIController extends BaseScriptComponent {
       this.showCafeButton.getTransform(),
       this.showBarsButton.getTransform(),
       this.showRestaurantsButton.getTransform(),
+      this.rangeSelectionButton.getTransform(),
+      this.range100Button.getTransform(),
+      this.range400Button.getTransform(),
+      this.range800Button.getTransform(),
     ];
 
     if (this.logObject !== undefined) {
@@ -126,7 +151,33 @@ export class MapUIController extends BaseScriptComponent {
       this.showCafeButton.sceneObject.enabled = false;
       this.showBarsButton.sceneObject.enabled = false;
       this.showRestaurantsButton.sceneObject.enabled = false;
+      this.rangeSelectionButton.sceneObject.enabled = false;
+      this.hideRangeDropdown();
     }
+
+    // Set button titles
+    this.rangeSelectionButton.sceneObject.name = "Radius";
+    this.range100Button.sceneObject.name = "100m";
+    this.range400Button.sceneObject.name = "400m";
+    this.range800Button.sceneObject.name = "800m";
+  }
+
+  private handleRangeSelectionButtonPinched(event: InteractorEvent) {
+    this.toggleRangeDropdown();
+  }
+
+  private showRangeDropdown() {
+    this.rangeDropdownVisible = true;
+    this.range100Button.sceneObject.enabled = true;
+    this.range400Button.sceneObject.enabled = true;
+    this.range800Button.sceneObject.enabled = true;
+  }
+
+  private hideRangeDropdown() {
+    this.rangeDropdownVisible = false;
+    this.range100Button.sceneObject.enabled = false;
+    this.range400Button.sceneObject.enabled = false;
+    this.range800Button.sceneObject.enabled = false;
   }
 
   private handleSpawnPinButtonPinched(event: InteractorEvent) {
@@ -164,6 +215,8 @@ export class MapUIController extends BaseScriptComponent {
       this.showCafeButton.sceneObject.enabled = false;
       this.showBarsButton.sceneObject.enabled = false;
       this.showRestaurantsButton.sceneObject.enabled = false;
+      this.rangeSelectionButton.sceneObject.enabled = false;
+      this.hideRangeDropdown();
       this.tweenCancelFunction = makeTween((t) => {
         this.buttonTransforms[ButtonType.ZOOM_IN].setLocalPosition(
           vec3.lerp(ZOOM_IN_BUTTON_OFFSET_FULL, ZOOM_IN_BUTTON_OFFSET_MINI, t)
@@ -180,6 +233,9 @@ export class MapUIController extends BaseScriptComponent {
         );
         this.buttonTransforms[ButtonType.TOGGLE_MINI_MAP].setLocalPosition(
           vec3.lerp(TOGGLE_BUTTON_OFFSET_FULL, TOGGLE_BUTTON_OFFSET_MINI, t)
+        );
+        this.buttonTransforms[ButtonType.RANGE_SELECTION].setLocalPosition(
+          vec3.lerp(RANGE_BUTTON_OFFSET_FULL, RANGE_BUTTON_OFFSET_MINI, t)
         );
       }, TWEEN_DURATION);
     } else {
@@ -200,6 +256,9 @@ export class MapUIController extends BaseScriptComponent {
         this.buttonTransforms[ButtonType.TOGGLE_MINI_MAP].setLocalPosition(
           vec3.lerp(TOGGLE_BUTTON_OFFSET_MINI, TOGGLE_BUTTON_OFFSET_FULL, t)
         );
+        this.buttonTransforms[ButtonType.RANGE_SELECTION].setLocalPosition(
+          vec3.lerp(RANGE_BUTTON_OFFSET_MINI, RANGE_BUTTON_OFFSET_FULL, t)
+        );
 
         if (t > 0.99999) {
           this.spawnPinButton.sceneObject.enabled = true;
@@ -207,6 +266,7 @@ export class MapUIController extends BaseScriptComponent {
           this.showCafeButton.sceneObject.enabled = true;
           this.showBarsButton.sceneObject.enabled = true;
           this.showRestaurantsButton.sceneObject.enabled = true;
+          this.rangeSelectionButton.sceneObject.enabled = true;
         }
       }, TWEEN_DURATION);
     }
@@ -224,5 +284,18 @@ export class MapUIController extends BaseScriptComponent {
 
   private handleShowRestaurantsButtonPinched(event: InteractorEvent) {
     this.mapComponent.showNeaybyPlaces(["Restaurant"]);
+  }
+
+  private handleSetRangeButtonPinched(range: number) {
+    setNearbyPlacesRange(range);
+    this.hideRangeDropdown();
+  }
+
+  private toggleRangeDropdown() {
+    if (this.rangeDropdownVisible) {
+      this.hideRangeDropdown();
+    } else {
+      this.showRangeDropdown();
+    }
   }
 }
