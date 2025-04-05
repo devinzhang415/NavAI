@@ -1,0 +1,42 @@
+- !<AssetImportMetadata/ed04a9d2-ddad-4414-ad03-dff405349782>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 14c0f57a-bcef-46d1-9876-e83b63214170
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 14c0f57a-bcef-46d1-9876-e83b63214170
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 75e4039f-d765-4e0f-a6fd-f9c554b0afc0
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/75e4039f-d765-4e0f-a6fd-f9c554b0afc0>
+  SvgIcon: ""
+  Description: ""
+  InternalVersion: 0
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: c63f5f40-c037-4d0b-b1ac-83b86693af8e
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    depth: false
+    text: false
+  ScriptTypesHidden:
+    {}
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  DefaultScriptInputs:
+    - text: !<string> N
+      depth: !<float> 2.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input string text = "N"'
+    - // @input float depth = 2

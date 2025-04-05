@@ -725,7 +725,7 @@
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
     rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    scale: {x: 0.000000, y: 0.000000, z: 0.000000}
     hasSegmentScaleCompensation: false
   Children:
     []
@@ -986,7 +986,6 @@
     hasSegmentScaleCompensation: false
   Children:
     - !<own> a7843b0c-e4a2-4562-b5f3-451e72d38412
-    - !<own> 7994a59b-47ca-4e8f-9a64-8accb37621df
     - !<own> a495a4ea-226e-4f97-8bca-2d1e6d5a8489
     - !<own> 9501c741-a4b1-4ec0-b57d-01b8611a505f
     - !<own> 8973268c-2b61-4b58-b172-8df71b267dfa
@@ -995,8 +994,6 @@
     - !<own> 0e7ff764-1256-429a-9fe2-5df6938a4b12
     - !<own> 7092955b-bc52-4f48-8f5f-cac6d25a0dd6
     - !<own> 2fd11cef-c9fd-466a-aaeb-2c6d6a047e0d
-    - !<own> 5a89f5e4-8d80-44ca-b2ec-483b1e316f16
-    - !<own> a369f2c5-f52a-43ad-9fc1-833aff38598e
     - !<own> b2e6f14f-0145-4a1f-a73b-d06c24988de2
   Components:
     - !<own> 8dcf448c-2f36-4870-a67e-791f15c07cee
@@ -1663,7 +1660,7 @@
     []
   Name: Render Mesh Visual
   Enabled: true
-  RenderOrder: 1
+  RenderOrder: 2
   StretchMode: Stretch
   VerticalAlignment: Center
   HorizontalAlignment: Center
@@ -2191,7 +2188,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 28.175400, y: 20.750000, z: 2.000000}
+    position: {x: 0.000000, y: -11.250000, z: 0.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -3137,7 +3134,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 28.175400, y: 28.250000, z: 2.000000}
+    position: {x: 0.000000, y: -3.750000, z: 0.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -4339,7 +4336,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 28.175400, y: 24.500000, z: 2.000000}
+    position: {x: 0.000000, y: -7.500000, z: 0.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -4549,7 +4546,7 @@
   LocalTransform:
     position: {x: -4.000000, y: -32.000000, z: 2.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    scale: {x: 0.000000, y: 0.000000, z: 0.000000}
     hasSegmentScaleCompensation: false
   Children:
     - !<own> e9e3a3bd-711c-4a0a-ba39-8495919f5e3f
@@ -4958,12 +4955,15 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 28.175400, y: 32.000000, z: 2.000000}
+    position: {x: -3.000000, y: -32.000000, z: 2.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
     - !<own> f6c60f41-16a4-4d51-8fbe-9bc47adb2064
+    - !<own> 7994a59b-47ca-4e8f-9a64-8accb37621df
+    - !<own> a369f2c5-f52a-43ad-9fc1-833aff38598e
+    - !<own> 5a89f5e4-8d80-44ca-b2ec-483b1e316f16
   Components:
     - !<own> 441d0eca-3d47-4651-8d46-bbf0c9c0622b
     - !<own> fa569d55-d559-41b3-beb0-cb6acf435e5f
@@ -5421,7 +5421,7 @@
     []
   Name: Render Mesh Visual
   Enabled: true
-  RenderOrder: 2
+  RenderOrder: 3
   StretchMode: Stretch
   VerticalAlignment: Center
   HorizontalAlignment: Center
