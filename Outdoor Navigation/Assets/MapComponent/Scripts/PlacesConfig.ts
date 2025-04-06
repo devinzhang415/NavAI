@@ -4,6 +4,8 @@ export let NEARBY_PLACES_FILTER = ["Coffee", "Bar", "Restaurant"];
 // Maximum number of places to return in a query
 export let NEARBY_PLACES_LIMIT = 20;
 
+export let NEARBY_PLACES_RANGE = 30;
+
 export function setNearbyPlacesFilter(newFilter: string[]) {
   NEARBY_PLACES_FILTER = newFilter;
 }
@@ -18,10 +20,11 @@ export function updateNearbyPlacesConfig(newFilter: string[], newLimit: number) 
 }
 
 // Export as a module
-export default {
-  NEARBY_PLACES_FILTER,
-  NEARBY_PLACES_LIMIT,
-  setNearbyPlacesFilter,
-  setNearbyPlacesLimit,
-  updateNearbyPlacesConfig
-};
+//export default {
+//  NEARBY_PLACES_FILTER,
+//  NEARBY_PLACES_LIMIT,
+//  NEARBY_PLACES_RANGE,
+//  setNearbyPlacesFilter,
+//  setNearbyPlacesLimit,
+//  updateNearbyPlacesConfig
+//};

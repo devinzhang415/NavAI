@@ -31,7 +31,7 @@
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
-    - remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
+    - remoteServiceModule: !<reference.RemoteServiceModule> ed34df1b-9924-462e-bbaa-5d9aee712f5d
   ScriptTypes:
     -
       {}

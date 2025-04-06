@@ -2,7 +2,7 @@
 const placesModule = require("./Snapchat Places API Module");
 
 import { getPhysicalDistanceBetweenLocations } from "./MapUtils";
-import { NEARBY_PLACES_FILTER, NEARBY_PLACES_LIMIT } from "./PlacesConfig";
+import { NEARBY_PLACES_RANGE, NEARBY_PLACES_FILTER, NEARBY_PLACES_LIMIT } from "./PlacesConfig";
 
 export type Address = {
   street_address: string;
@@ -112,7 +112,7 @@ export class SnapPlacesProvider extends BaseScriptComponent {
             parameters: {
               lat: location.latitude.toString(),
               lng: location.longitude.toString(),
-              gps_accuracy_m: "100",
+              gps_accuracy_m: NEARBY_PLACES_RANGE.toString(),
               places_limit: placesLimit.toString(),
             },
           })
