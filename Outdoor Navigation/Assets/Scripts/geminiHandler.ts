@@ -35,19 +35,10 @@ export class  Handler extends BaseScriptComponent {
     // choosePlace now takes possible_places and location as inputs.
     async choosePlace(lat: number, lng: number): Promise<PlaceIdentificationResult> {
         try {
-            print("Flag 0");
-            
             // Convert the image texture to a Base64 string using the asynchronous API.
-//            await this.waitForTextureToLoad(this.imageComponent);
-            print(this.imageComponent);
-            print(typeof(this.imageComponent));
-            print(JSON.stringify(this.imageComponent));
             const base64Image = await this.ImageToBase64(this.imageComponent);
-                       
-            //const base64Image = this.imageComponent;
-            print("Flag 1")
             
-           const placesRequest = new Request("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=33.777382,-84.396604&radius=100&key=AIzaSyB7wSe9y3D-u4FMAPjl5TXupnSGh5eV3IU", {
+           const placesRequest = new Request("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=33.777382,-84.396604&radius=20000&key=AIzaSyB7wSe9y3D-u4FMAPjl5TXupnSGh5eV3IU", {
                method: "GET",
             });
             
@@ -56,9 +47,8 @@ export class  Handler extends BaseScriptComponent {
                 throw new Error("HTTP error " + placesResponse.status);
             }
             const placesData = await placesResponse.json();
-            print("Places data: " + JSON.stringify(placesData));
+            // print("Places data: " + JSON.stringify(placesData));
 
-            print("Flag 2")
             const places = placesData.results ?? [];
             if (places.length === 0) {
                 print("No nearby places found; aborting choosePlace.");
@@ -72,15 +62,12 @@ export class  Handler extends BaseScriptComponent {
             
             // Extract just the names from the places
             const possible_places = places.map(place => place.name);
-            print("Place names: " + JSON.stringify(possible_places));
-            
-            print("Flag 3")
+            // print("Place names: " + JSON.stringify(possible_places));
             const requestPayload = {
                 image_data: base64Image,
                 possible_places: possible_places,
                 location: { lat, lng }
             };
-            print("Flag 4")
             // Create a Request object for the POST call.
             const request = new Request("https://gtxr-flask-7c107d1c5356.herokuapp.com/identify-place", {
                 method: "POST",
@@ -97,7 +84,7 @@ export class  Handler extends BaseScriptComponent {
                 throw new Error("HTTP error " + response.status);
             }
             const data = await response.json();
-            print("Response received: " + JSON.stringify(data));
+            // print("Response received: " + JSON.stringify(data));
         } catch (error) {
             print("Error in choosePlace: " + error);
         }
