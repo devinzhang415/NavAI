@@ -99,7 +99,6 @@ export class SpeechToText extends BaseScriptComponent {
             const location = locations[index]['geometry']['location'];
             this.mapComponent.createMapPin(location['lng'], location['lat']);
           }
-          this.mapComponent.createMapPinAtUserLocation();
         });
         this.isEnabled = false;
         this.text.text = '';
