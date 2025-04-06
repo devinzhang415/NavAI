@@ -28,8 +28,6 @@ export class  Handler extends BaseScriptComponent {
         const lng = -84.398;
     
         // now choosePlace will fetch nearby places internally
-        this.choosePlace(lat, lng)
-          .catch(err => print("Error in choosePlace: " + err));
       }
 
     // choosePlace now takes possible_places and location as inputs.
@@ -84,7 +82,8 @@ export class  Handler extends BaseScriptComponent {
                 throw new Error("HTTP error " + response.status);
             }
             const data = await response.json();
-            // print("Response received: " + JSON.stringify(data));
+            print("Response received: " + JSON.stringify(data));
+            return response.json();
         } catch (error) {
             print("Error in choosePlace: " + error);
         }
@@ -94,11 +93,6 @@ export class  Handler extends BaseScriptComponent {
     ImageToBase64(img: Image): Promise<string> {
         return new Promise((resolve, reject) => {
             const texture = img.mainPass.baseTex;
-            if (!texture) {
-                reject("No texture found on image");
-                return;
-            }
-            // Use the asynchronous encoding method.
             Base64.encodeTextureAsync(
                 texture,
                 resolve,
