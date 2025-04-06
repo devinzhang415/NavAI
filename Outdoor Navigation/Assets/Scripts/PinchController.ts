@@ -80,8 +80,9 @@ export class PinchController extends BaseScriptComponent {
                 if (this.geminiHandler) {
                     // Show the popup immediately with "loading" text
                     if (this.popupController) {
-                        this.popupController.toggleFrame();
-                        this.popupController.updateInfo("Identifying location...", "Please wait...");
+//                        this.popupController.toggleFrame();
+                        this.popupController.showFrameWithInfo("", "Loading...");
+                        this.popupController.updateInfo("Identifying location...", "Loading...");
                     }
                     
                     // Set default coordinates (you can replace these with actual GPS coords)
@@ -89,15 +90,17 @@ export class PinchController extends BaseScriptComponent {
                     const lng = -84.398;
                     
                     // First, identify the place
+                    
+                    
                     this.geminiHandler.choosePlace(lat, lng)
                         .then(async (result) => {
                             try {
                                 // Extract the identified place from the result
                                 let identifiedPlace = "Unknown location";
                                 if (result.identified_place) {
-                                    identifiedPlace = result.identified_place;
+                                   identifiedPlace = result.identified_place;
                                 }
-                                print("Identified place: " + identifiedPlace);
+//                                print("Identified place: " + identifiedPlace);
                                 
                                 // Update the popup with the identified place and loading message
                                 if (this.popupController) {
@@ -118,6 +121,7 @@ export class PinchController extends BaseScriptComponent {
                                 // Update the popup with the complete information
                                 if (this.popupController) {
                                     this.popupController.updateInfo(identifiedPlace, description);
+                                    print("WE ARE UPDATING PROPERLY!");
                                 }
                             } catch (error) {
                                 print("Error processing place info: " + error);
@@ -137,7 +141,8 @@ export class PinchController extends BaseScriptComponent {
                     
                     // Show popup with error message
                     if (this.popupController) {
-                        this.popupController.toggleFrame();
+//                        this.popupController.toggleFrame();
+                        this.popupController.showFrameWithInfo("", "Location services unavailable");
                         this.popupController.updateInfo("Error", "Location services unavailable");
                     }
                 }
