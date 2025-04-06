@@ -51,7 +51,7 @@ export class PinchController extends BaseScriptComponent {
         
     }
     
-    private update() {
+    private async update() {
         if (!this.isClosed) {
             // if open and both are down then set to close
             if (this.rightDown && this.leftDown) {
@@ -65,10 +65,16 @@ export class PinchController extends BaseScriptComponent {
                 print("here is when we call the function");
                 
                 let cameraModule = require('LensStudio:CameraModule');
-                let cameraRequest = CameraModule.createCameraRequest();           
-                let cameraTexture = cameraModule.requestCamera(cameraRequest);
-                this.uiImage.mainPass.baseTex = cameraTexture;
-     
+                // let cameraRequest = CameraModule.createCameraRequest();           
+                // let cameraTexture = cameraModule.requestCamera(cameraRequest);
+                // this.uiImage.mainPass.baseTex = cameraTexture;
+                let imageRequest = CameraModule.createImageRequest();
+                try {
+                    let imageFrame = await cameraModule.requestImage(imageRequest);
+                    this.uiImage.mainPass.baseTex = imageFrame.texture;
+                } catch (error) {
+                    print("still image request failed");
+                }
                 
                 // Use the geminiHandler input directly
                 if (this.geminiHandler) {
