@@ -26,9 +26,7 @@ import {
 } from "./MapUtils";
 import { PinOffsetter } from "./PinOffsetter";
 import { PlaceInfo, SnapPlacesProvider } from "./SnapPlacesProvider";
-// import { NEARBY_PLACES_RANGE } from "./PlacesConfig";
-
-const NEARBY_PLACES_RANGE = 800;
+import { NEARBY_PLACES_RANGE } from "./PlacesConfig"
 
 const TEXTURE_SIZE = 512;
 
