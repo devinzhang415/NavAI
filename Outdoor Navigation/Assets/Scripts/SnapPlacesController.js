@@ -4,7 +4,9 @@
 const Module = require("../Snapchat Places API API Module");
 const ApiModule = new Module.ApiModule(script.remoteServiceModule);
 
-import { NEARBY_PLACES_LIMIT } from "./PlacesConfig";
+// import { NEARBY_PLACES_LIMIT } from "./PlacesConfig";
+
+const NEARBY_PLACES_LIMIT = 20;
 
 /**
  * Place retrieval utilities
