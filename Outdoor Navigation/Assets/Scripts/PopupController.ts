@@ -20,7 +20,12 @@ export class PopupController extends BaseScriptComponent {
             this.nameComponent.text = nameVal;
         }
         if (this.infoComponent) {
-            this.infoComponent.text = info;
+            let result = "";
+            for (let i = 0; i < info.length; i += 40) {
+                const chunk = info.slice(i, i + 40);
+                result += chunk + "\n";
+            }
+            this.infoComponent.text = result;
         }
     }
     

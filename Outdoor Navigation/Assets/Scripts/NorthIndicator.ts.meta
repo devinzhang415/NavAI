@@ -27,16 +27,16 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     depth: false
-    text: false
+    radiusScale: false
   ScriptTypesHidden:
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - depth: !<float> 2.000000
-      text: !<string> N
+      radiusScale: 0.600000
   ScriptTypes:
     -
       {}
   InputLines:
-    - '// @input string text = "N"'
     - // @input float depth = 2
+    - // @input float radiusScale = 0.6

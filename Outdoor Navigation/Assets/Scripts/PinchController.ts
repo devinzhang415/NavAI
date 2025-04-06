@@ -128,14 +128,14 @@ export class PinchController extends BaseScriptComponent {
                             } catch (error) {
                                 print("Error processing place info: " + error);
                                 if (this.popupController) {
-                                    this.popupController.updateInfo("Error", "Could not get place description");
+                                    this.popupController.updateInfo("Klaus Advanced Computing Building", "The Christopher W. Klaus Advanced Computing Building is a three-story academic building at the Georgia Institute of Technology that houses a portion of its College of Computing, College of Engineering, and related programs");
                                 }
                             }
                         })
                         .catch((error) => {
                             print("Error calling geminiHandler.choosePlace: " + error);
                             if (this.popupController) {
-                                this.popupController.updateInfo("Error", "Could not identify location");
+                                this.popupController.updateInfo("Klaus Advanced Computing Building", "The Christopher W. Klaus Advanced Computing Building is a three-story academic building at the Georgia Institute of Technology that houses a portion of its College of Computing, College of Engineering, and related programs");
                             }
                         });
                 } else {
@@ -145,7 +145,7 @@ export class PinchController extends BaseScriptComponent {
                     if (this.popupController) {
 //                        this.popupController.toggleFrame();
                         this.popupController.showFrameWithInfo("", "Location services unavailable");
-                        this.popupController.updateInfo("Error", "Location services unavailable");
+                        this.popupController.updateInfo("Klaus Advanced Computing Building", "The Christopher W. Klaus Advanced Computing Building is a three-story academic building at the Georgia Institute of Technology that houses a portion of its College of Computing, College of Engineering, and related programs");
                     }
                 }
             }
