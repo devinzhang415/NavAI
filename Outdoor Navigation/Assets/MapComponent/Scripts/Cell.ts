@@ -1,4 +1,4 @@
-import { TWEEN_DURATION } from "../../Scripts/MapUIController";
+import { TWEEN_DURATION } from "../../Scripts/MapConstants";
 import { CancelFunction } from "../../SpectaclesInteractionKit/Utils/animate";
 import Event from "../../SpectaclesInteractionKit/Utils/Event";
 import NativeLogger from "../../SpectaclesInteractionKit/Utils/NativeLogger";
