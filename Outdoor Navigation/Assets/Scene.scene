@@ -7,7 +7,6 @@
     - !<own> d1583ee4-a7ed-4727-a912-a62530c0984d
     - !<own> aa4c9644-7e91-4fd9-a405-4c02157e2375
     - !<own> f3d4aad6-b1c5-472f-a971-735bf489b276
-    - !<own> 202761d2-c037-4ef2-a391-b2b8fed91d2c
     - !<own> b8f2204d-7128-47ff-a775-e69e2f45f9aa
     - !<own> 87cdd506-03c1-42aa-8cbd-6c8ce21d4da6
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
@@ -902,21 +901,6 @@
     - !<own> 01dd1c60-8098-4833-915d-cf534d39b0c0
   Components:
     []
-- !<SceneObject/202761d2-c037-4ef2-a391-b2b8fed91d2c>
-  PrefabRemaps:
-    []
-  Name: Snapchat Places API API
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> fcd6e501-88f4-4efe-867b-0ada5a007786
 - !<SceneObject/220b3fc0-0de8-4c15-ad2d-09db6d6c86cd>
   PrefabRemaps:
     []
@@ -1565,7 +1549,7 @@
   Enabled: true
   ScriptAsset: !<reference> dfb01b8d-f3de-4f18-a384-76d3d7a050ab
   ScriptInputsDefault:
-    {}
+    remoteServiceModule: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -5010,7 +4994,7 @@
   LocalTransform:
     position: {x: -3.000000, y: -32.000000, z: 2.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    scale: {x: 0.000000, y: 0.000000, z: 0.000000}
     hasSegmentScaleCompensation: false
   Children:
     - !<own> f6c60f41-16a4-4d51-8fbe-9bc47adb2064
@@ -5132,7 +5116,7 @@
   PrefabRemaps:
     []
   Name: PinchController
-  Enabled: true
+  Enabled: false
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
@@ -7253,22 +7237,6 @@
     - !<own> ee813fe1-e7af-4f39-9545-48ab7c13a414
   Components:
     []
-- !<ScriptComponent/fcd6e501-88f4-4efe-867b-0ada5a007786>
-  PrefabRemaps:
-    []
-  Name: Snapchat Places API API
-  Enabled: true
-  ScriptAsset: !<reference> 3ffe47bb-d5fa-4e04-af15-675aff382e33
-  ScriptInputsDefault:
-    {}
-  ScriptTypesDefault:
-    {}
-  ScriptInputs:
-    "":
-      remoteServiceModule: !<reference.RemoteServiceModule> fb78c99e-2bd3-4a89-99fe-5e222d2f2f54
-  ScriptTypes:
-    "":
-      {}
 - !<RenderMeshVisual/fda22202-45d2-4777-9adb-d634fcdbd1c0>
   PrefabRemaps:
     []
