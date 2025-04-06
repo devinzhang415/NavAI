@@ -9,8 +9,8 @@ export class SpeechToText extends BaseScriptComponent {
   @input() 
   remoteServiceModule: RemoteServiceModule;
 
-  @input
-  private mapComponent: MapComponent;
+  @input()
+  mapComponent: MapComponent;
 
   // Remote service module for fetching data
   private voiceMLModule: VoiceMLModule = require("LensStudio:VoiceMLModule");
@@ -90,15 +90,16 @@ export class SpeechToText extends BaseScriptComponent {
       if (!this.isEnabled) {
         this.isEnabled = this.containsActivation(eventData.transcription);
       } else {
-        this.queryGemini(this.text.text).then(async output => {
+        this.queryGemini(this.text.text).then(output => {
           const categories = output['categories'];
-          const locations = output['locations'];
+          const locations = output['locations']['results'];
           const nSamples = 4;
-          for (let i = 0; i < nSamples; ++i) {
+          for (let i = 0; i < nSamples; i += 1) {
             const index = Math.floor(Math.random() * locations.length);
             const location = locations[index]['geometry']['location'];
             this.mapComponent.createMapPin(location['lng'], location['lat']);
           }
+          this.mapComponent.createMapPinAtUserLocation();
         });
         this.isEnabled = false;
         this.text.text = '';
