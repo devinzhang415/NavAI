@@ -123,6 +123,8 @@ export class PinchController extends BaseScriptComponent {
                                     this.popupController.updateInfo(identifiedPlace, description);
                                     print("WE ARE UPDATING PROPERLY!");
                                 }
+                                                   
+                            
                             } catch (error) {
                                 print("Error processing place info: " + error);
                                 if (this.popupController) {
