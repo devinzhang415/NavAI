@@ -1,5 +1,14 @@
 import { NEARBY_PLACES_LIMIT } from "../MapComponent/Scripts/PlacesConfig";
 
+
+interface PlaceIdentificationResult {
+    success: boolean;
+    identified_place: string | null;
+    possible_places: string[];
+    error?: string;
+}
+
+
 @component
 export class  Handler extends BaseScriptComponent {
     // Expose an Image component via Lens input.
@@ -12,7 +21,7 @@ export class  Handler extends BaseScriptComponent {
 
     onAwake() {
         // load your JS wrapper
-        this.PlacesAPI = require("./SnapPlacesController.js");
+//        this.PlacesAPI = require("./SnapPlacesController.js");
     
         // TODO: replace these dummy coords with real GPS
         const lat = 33.776;
@@ -24,31 +33,54 @@ export class  Handler extends BaseScriptComponent {
       }
 
     // choosePlace now takes possible_places and location as inputs.
-    async choosePlace(lat: number, lng: number): Promise<void> {
+    async choosePlace(lat: number, lng: number): Promise<PlaceIdentificationResult> {
         try {
-            // Convert the image texture to a Base64 string using the asynchronous API.
-            const base64Image = await this.ImageToBase64(this.imageComponent);
+            print("Flag 0");
             
-            // Build the payload using the converted image.
-            const placesData = await this.PlacesAPI.getNearbyPlaces(
-                lat,
-                lng,
-                /* accuracy */ 10,
-                /* limit */ NEARBY_PLACES_LIMIT
-            );
-
-            const possible_places = placesData.places ?? [];
-            if (possible_places.length === 0) {
-                print("No nearby places found; aborting choosePlace.");
-                return;
+            // Convert the image texture to a Base64 string using the asynchronous API.
+//            await this.waitForTextureToLoad(this.imageComponent);
+            print(this.imageComponent);
+            print(typeof(this.imageComponent));
+            print(JSON.stringify(this.imageComponent));
+            const base64Image = await this.ImageToBase64(this.imageComponent);
+                       
+            //const base64Image = this.imageComponent;
+            print("Flag 1")
+            
+           const placesRequest = new Request("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=33.777382,-84.396604&radius=100&key=AIzaSyB7wSe9y3D-u4FMAPjl5TXupnSGh5eV3IU", {
+               method: "GET",
+            });
+            
+            const placesResponse = await this.remoteServiceModule.fetch(placesRequest);
+            if (!placesResponse.ok) {
+                throw new Error("HTTP error " + placesResponse.status);
             }
+            const placesData = await placesResponse.json();
+            print("Places data: " + JSON.stringify(placesData));
 
+            print("Flag 2")
+            const places = placesData.results ?? [];
+            if (places.length === 0) {
+                print("No nearby places found; aborting choosePlace.");
+                return {
+                    success: false,
+                    identified_place: null,
+                    possible_places: [],
+                    error: "No nearby places found"
+                };
+            }
+            
+            // Extract just the names from the places
+            const possible_places = places.map(place => place.name);
+            print("Place names: " + JSON.stringify(possible_places));
+            
+            print("Flag 3")
             const requestPayload = {
                 image_data: base64Image,
                 possible_places: possible_places,
                 location: { lat, lng }
-              };
-
+            };
+            print("Flag 4")
             // Create a Request object for the POST call.
             const request = new Request("https://gtxr-flask-7c107d1c5356.herokuapp.com/identify-place", {
                 method: "POST",
@@ -57,6 +89,7 @@ export class  Handler extends BaseScriptComponent {
                 },
                 body: JSON.stringify(requestPayload)
             });
+
 
             // Use RemoteServiceModule's fetch method.
             const response = await this.remoteServiceModule.fetch(request);
@@ -87,5 +120,49 @@ export class  Handler extends BaseScriptComponent {
                 EncodingType.Png
             );
         });
+    }
+    
+    /**
+     * Generates a description for a specific place using the Gemini API
+     * @param placeName The name of the place to describe
+     * @param mapsInfo Additional map information about the place
+     * @returns Promise with the generated description
+     */
+    async generatePlaceDescription(placeName: string, mapsInfo: any): Promise<string> {
+        try {
+            // Create a payload for the request
+            const requestPayload = {
+                place_name: placeName,
+                maps_info: mapsInfo
+            };
+
+            // Create a Request object for the POST call
+            const request = new Request("https://gtxr-flask-7c107d1c5356.herokuapp.com/generate-place-description", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestPayload)
+            });
+
+            // Use RemoteServiceModule's fetch method
+            const response = await this.remoteServiceModule.fetch(request);
+            if (!response.ok) {
+                throw new Error("HTTP error " + response.status);
+            }
+            
+            const data = await response.json();
+            print("Description received: " + JSON.stringify(data));
+            
+            // Return the description from the response
+            if (data.success) {
+                return data.description || "No description available.";
+            } else {
+                throw new Error(data.error || "Unknown error generating description");
+            }
+        } catch (error) {
+            print("Error generating place description: " + error);
+            return "Could not generate description due to an error.";
+        }
     }
 }

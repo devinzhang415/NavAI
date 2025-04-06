@@ -680,6 +680,7 @@
     "":
       mapComponent: !<MappingBased.MapComponent> c99d4f2c-f5f0-4683-bb28-e2bbf4c7ea40
       popupController: !<MappingBased.PopupController> 51e9fa2b-c8e3-4cb0-a632-e319340d39c9
+      geminiHandler: !<MappingBased.geminiHandler> b11f4d69-2fee-46db-b29b-fa76d9bfcac4
       uiImage: !<reference.Image> ca19472a-a01c-4230-a69a-db04aeb69519
   ScriptTypes:
     "":
@@ -1648,7 +1649,7 @@
   PrefabRemaps:
     []
   Name: Object 0
-  Enabled: true
+  Enabled: false
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
@@ -2002,13 +2003,13 @@
   Enabled: true
   ScriptAsset: !<reference> 55597654-c30b-436d-bd64-250c330b0018
   ScriptInputsDefault:
-    remoteServiceModule: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
     "":
       text: !<reference.Text> 565a4f1f-13a5-476b-ab7e-87a3d3418dc2
-      remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
+      remoteServiceModule: !<reference.RemoteServiceModule> ed34df1b-9924-462e-bbaa-5d9aee712f5d
   ScriptTypes:
     "":
       {}

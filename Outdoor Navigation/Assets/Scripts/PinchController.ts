@@ -1,6 +1,8 @@
 import { SIK } from "SpectaclesInteractionKit/SIK";
 import { MapComponent } from "../MapComponent/Scripts/MapComponent";
 import { PopupController } from "./PopupController"
+import { Handler } from "Scripts/geminiHandler";
+
 
 @component
 export class PinchController extends BaseScriptComponent {
@@ -15,6 +17,9 @@ export class PinchController extends BaseScriptComponent {
     // New input to reference the PopupController component.
     @input
     private popupController: PopupController;
+    
+    @input
+    geminiHandler: Handler;
     
     private leftDown : boolean;
     private rightDown : boolean;
@@ -57,28 +62,79 @@ export class PinchController extends BaseScriptComponent {
             // If closed, and both fingers are up then open
             if (!this.rightDown && !this.leftDown) {
                 this.isClosed = false;
-                print("here is when we call the function")
+                print("here is when we call the function");
                 
                 let cameraModule = require('LensStudio:CameraModule');
                 let cameraRequest = CameraModule.createCameraRequest();           
                 let cameraTexture = cameraModule.requestCamera(cameraRequest);
-                this.uiImage.mainPass.baseTex = cameraTexture
-                // Update the popup with the desired values.
-                if (this.popupController) {
-                    this.popupController.toggleFrame();
-                    this.popupController.updateInfo("krish", "hello guys");
+                this.uiImage.mainPass.baseTex = cameraTexture;
+     
+                
+                // Use the geminiHandler input directly
+                if (this.geminiHandler) {
+                    // Show the popup immediately with "loading" text
+                    if (this.popupController) {
+                        this.popupController.toggleFrame();
+                        this.popupController.updateInfo("Identifying location...", "Please wait...");
+                    }
+                    
+                    // Set default coordinates (you can replace these with actual GPS coords)
+                    const lat = 33.776;
+                    const lng = -84.398;
+                    
+                    // First, identify the place
+                    this.geminiHandler.choosePlace(lat, lng)
+                        .then(async (result) => {
+                            try {
+                                // Extract the identified place from the result
+                                let identifiedPlace = "Unknown location";
+                                if (result.identified_place) {
+                                    identifiedPlace = result.identified_place;
+                                }
+                                print("Identified place: " + identifiedPlace);
+                                
+                                // Update the popup with the identified place and loading message
+                                if (this.popupController) {
+                                    this.popupController.updateInfo(identifiedPlace, "Loading description...");
+                                }
+                                
+                                // Prepare maps info for the description generation
+                                const mapsInfo = {
+                                    location: { lat, lng },
+                                    type: "landmark",
+                                    nearby: result?.possible_places || []
+                                };
+                                
+                                // Now generate a description for the identified place
+                                const description = await this.geminiHandler.generatePlaceDescription(identifiedPlace, mapsInfo);
+                                print("Generated description: " + description);
+                                
+                                // Update the popup with the complete information
+                                if (this.popupController) {
+                                    this.popupController.updateInfo(identifiedPlace, description);
+                                }
+                            } catch (error) {
+                                print("Error processing place info: " + error);
+                                if (this.popupController) {
+                                    this.popupController.updateInfo("Error", "Could not get place description");
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            print("Error calling geminiHandler.choosePlace: " + error);
+                            if (this.popupController) {
+                                this.popupController.updateInfo("Error", "Could not identify location");
+                            }
+                        });
+                } else {
+                    print("geminiHandler input not set");
+                    
+                    // Show popup with error message
+                    if (this.popupController) {
+                        this.popupController.toggleFrame();
+                        this.popupController.updateInfo("Error", "Location services unavailable");
+                    }
                 }
-                
-                // Run Fetch to find the right location, and pull that locations x, y 
-                
-//                let x = 0;
-//                let y = 0;
-//                const position = new vec2(x, y);
-//
-//                this.mapComponent.addPinByLocalPosition(position)
-                
-            
-            // this.mapComponent.addPinByLocalPosition(vec2.zero());
             }
         }
         
