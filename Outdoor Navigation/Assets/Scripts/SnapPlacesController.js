@@ -5,7 +5,7 @@ const Module    = require("../Snapchat Places API API Module");
 const ApiModule = require("LensStudio:RemoteServiceModule");
 
 
-let NEARBY_PLACES_LIMIT = 20;
+const NEARBY_PLACES_LIMIT = 20;
 
 const PlacesAPI = {
  /**

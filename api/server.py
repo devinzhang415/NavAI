@@ -257,6 +257,11 @@ def generate_place_description():
             "error": str(e)
         }), 500
 
+@app.route('/speech_to_text', methods=['POST'])
+def speech_to_text():
+    print("Called on the server")
+    return jsonify({'words': ['hi', 'hello']})
+
 if __name__ == '__main__':
     # Use the PORT environment variable provided by Heroku, or default to 5000
     port = int(os.environ.get("PORT", 5000))
