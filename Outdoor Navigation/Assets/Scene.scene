@@ -2109,6 +2109,7 @@
     "":
       nameComponent: !<reference.Text> 819ddbda-6e50-49e9-b02e-80d326d23a6e
       infoComponent: !<reference.Text> a00606bf-9589-4677-8d0d-af91e8630184
+      frame: !<MappingBased.ContainerFrame> f140b403-3a62-4a24-a997-b0ed40a648f6
   ScriptTypes:
     "":
       {}

@@ -20,7 +20,6 @@ export class  Handler extends BaseScriptComponent {
     
         // now choosePlace will fetch nearby places internally
         this.choosePlace(lat, lng)
-          .catch(err => print("Error in choosePlace:", err));
       }
 
     // choosePlace now takes possible_places and location as inputs.
