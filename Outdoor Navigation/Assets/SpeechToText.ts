@@ -1,3 +1,5 @@
+import { MapComponent } from "./MapComponent/Scripts/MapComponent";
+
 @component
 export class SpeechToText extends BaseScriptComponent {
     
@@ -6,6 +8,9 @@ export class SpeechToText extends BaseScriptComponent {
 
   @input() 
   remoteServiceModule: RemoteServiceModule;
+
+  @input
+  private mapComponent: MapComponent;
 
   // Remote service module for fetching data
   private voiceMLModule: VoiceMLModule = require("LensStudio:VoiceMLModule");
@@ -65,26 +70,43 @@ export class SpeechToText extends BaseScriptComponent {
     }
     const data = await response.json();
     const responseCategories = (data['candidates'][0]['content']['parts'][0]['text']);
-    if (!responseCategories.includes(',')) {
-      return [];
-    } else {
-      return responseCategories.split(',');
+    const categoriesOutput = responseCategories.includes(',') ? responseCategories.split(',') : [];
+
+    const placesRequest = new Request("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=33.777382,-84.396604&radius=7500&key=AIzaSyB7wSe9y3D-u4FMAPjl5TXupnSGh5eV3IU", {
+      method: "GET"
+    });
+    
+    const placesResponse = await this.remoteServiceModule.fetch(placesRequest);
+    if (!placesResponse.ok) {
+        throw new Error("HTTP error " + placesResponse.status);
     }
+    const placesData = await placesResponse.json();
+    return { 'categories': categoriesOutput, 'locations': placesData };
   }
 
   onListenUpdate = (eventData: VoiceML.ListeningUpdateEventArgs) => {
+    print('onListenUpdate');
     if (eventData.isFinalTranscription) {
       if (!this.isEnabled) {
         this.isEnabled = this.containsActivation(eventData.transcription);
       } else {
-        this.queryGemini(this.text.text);
+        this.queryGemini(this.text.text).then(async output => {
+          const categories = output['categories'];
+          const locations = output['locations'];
+          const nSamples = 4;
+          for (let i = 0; i < nSamples; ++i) {
+            const index = Math.floor(Math.random() * locations.length);
+            const location = locations[index]['geometry']['location'];
+            this.mapComponent.createMapPin(location['lng'], location['lat']);
+          }
+        });
         this.isEnabled = false;
         this.text.text = '';
       }
     }
     
     if (this.isEnabled) {
-        this.text.text = eventData.transcription;
+      this.text.text = eventData.transcription;
     }
   };
 }

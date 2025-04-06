@@ -1649,7 +1649,7 @@
   PrefabRemaps:
     []
   Name: Object 0
-  Enabled: false
+  Enabled: true
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
@@ -2010,6 +2010,7 @@
     "":
       text: !<reference.Text> 565a4f1f-13a5-476b-ab7e-87a3d3418dc2
       remoteServiceModule: !<reference.RemoteServiceModule> ed34df1b-9924-462e-bbaa-5d9aee712f5d
+      mapComponent: !<MappingBased.MapComponent> c99d4f2c-f5f0-4683-bb28-e2bbf4c7ea40
   ScriptTypes:
     "":
       {}
@@ -2042,7 +2043,7 @@
   Children:
     - !<own> 0075c3b5-66c7-4366-8975-9b5e0258801e
     - !<own> 0a03656d-89dc-45e8-aafa-80e16faaff71
-    - !<own> 5fafd29a-7284-4902-ba2d-88996b64c3ef
+    - !<own> 64b51f06-e967-4f41-9e14-318d08028109
   Components:
     []
 - !<SceneObject/4eb3c6c8-7e2d-4d76-92c2-a80d4d7145f5>
@@ -2127,7 +2128,7 @@
   ScriptInputs:
     "":
       nameComponent: !<reference.Text> 819ddbda-6e50-49e9-b02e-80d326d23a6e
-      infoComponent: !<reference.Text> a00606bf-9589-4677-8d0d-af91e8630184
+      infoComponent: !<reference.Text> ce50eb1f-f60e-42ee-93cb-5142062ab3f9
       frame: !<MappingBased.ContainerFrame> f140b403-3a62-4a24-a997-b0ed40a648f6
   ScriptTypes:
     "":
@@ -2220,20 +2221,20 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: DEBUG TEXT
+  Text: ""
   Editable: true
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
   SizeToFit: false
-  FontSize: 12
+  FontSize: 8
   Font: !<reference> 00000000-0000-0000-0000-000000000000
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
     right: 7.500000
     top: 2.250000
-  OverflowVertical: Overflow
-  OverflowHorizontal: Overflow
+  OverflowVertical: Shrink
+  OverflowHorizontal: Ellipsis
   Fill: !<TextFill>
     Mode: Solid
     Color: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
@@ -2453,21 +2454,6 @@
   ForceCompound: false
   Intangible: false
   ShowCollider: false
-- !<SceneObject/5fafd29a-7284-4902-ba2d-88996b64c3ef>
-  PrefabRemaps:
-    []
-  Name: Info
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: -13.000000, y: -2.000000, z: 2.000000}
-    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
-    scale: {x: 1.500000, y: 1.500000, z: 1.500000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> a00606bf-9589-4677-8d0d-af91e8630184
 - !<SceneObject/600d6957-65a0-4cc0-94f1-626abbd40b66>
   PrefabRemaps:
     []
@@ -2596,6 +2582,21 @@
     - !<own> 6152065f-dcbd-4945-b37f-04e5bd034d3e
   Components:
     []
+- !<SceneObject/64b51f06-e967-4f41-9e14-318d08028109>
+  PrefabRemaps:
+    []
+  Name: Text
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: -13.000000, y: -2.000000, z: 2.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.500000, y: 1.500000, z: 1.500000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> ce50eb1f-f60e-42ee-93cb-5142062ab3f9
 - !<SceneObject/64e2073c-9e48-4355-8fe7-05b77a0b6e3a>
   PrefabRemaps:
     []
@@ -3544,14 +3545,14 @@
   Enabled: true
   ScriptAsset: !<reference> 14c0f57a-bcef-46d1-9876-e83b63214170
   ScriptInputsDefault:
-    text: true
     depth: true
+    radiusScale: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
     "":
-      text: !<string> N
       depth: !<float> 2.000000
+      radiusScale: 0.600000
   ScriptTypes:
     "":
       {}
@@ -4401,95 +4402,6 @@
   ForceCompound: false
   Intangible: false
   ShowCollider: false
-- !<Text/a00606bf-9589-4677-8d0d-af91e8630184>
-  PrefabRemaps:
-    []
-  Name: Text
-  Enabled: true
-  RenderOrder: 0
-  StretchMode: Stretch
-  VerticalAlignment: Top
-  HorizontalAlignment: Left
-  MeshShadowMode: None
-  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-  ShadowDensity: 1.000000
-  Text: |-
-    4.8 * * * * *
-    266 Ferst Dr NW, Atlanta, GA 30332
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-    11
-  Editable: false
-  ShowEditingPreview: true
-  TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
-  SizeToFit: false
-  FontSize: 36
-  Font: !<reference> 00000000-0000-0000-0000-000000000000
-  LayoutRect:
-    left: 0.000000
-    bottom: -10.000000
-    right: 17.000000
-    top: 5.000000
-  OverflowVertical: Truncate
-  OverflowHorizontal: Truncate
-  Fill: !<TextFill>
-    Mode: Solid
-    Color: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-    Texture: !<reference> 00000000-0000-0000-0000-000000000000
-    TileCount: 5.000000
-    TileZone: Rect
-    TextureStretch: FitWidth
-  Outline: !<OutlineSettings>
-    Enabled: false
-    Fill: !<TextFill>
-      Mode: Solid
-      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
-      Texture: !<reference> 00000000-0000-0000-0000-000000000000
-      TileCount: 5.000000
-      TileZone: Rect
-      TextureStretch: FitWidth
-    Size: 0.250000
-  Dropshadow: !<DropshadowSettings>
-    Enabled: false
-    Fill: !<TextFill>
-      Mode: Solid
-      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
-      Texture: !<reference> 00000000-0000-0000-0000-000000000000
-      TileCount: 5.000000
-      TileZone: Rect
-      TextureStretch: FitWidth
-    OffsetX: 0.250000
-    OffsetY: 0.250000
-  Background: !<BackgroundSettings>
-    Enabled: false
-    Fill: !<TextFill>
-      Mode: Solid
-      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
-      Texture: !<reference> 00000000-0000-0000-0000-000000000000
-      TileCount: 5.000000
-      TileZone: Rect
-      TextureStretch: FitWidth
-    Margins:
-      left: 0.000000
-      bottom: 0.000000
-      right: 0.000000
-      top: 0.000000
-    CornerRadius: 0.000000
-  AdvancedLayout: !<TextAdvancedLayout>
-    ExtentsTarget: !<reference> 00000000-0000-0000-0000-000000000000
-    LetterSpacing: 0.000000
-    LineSpacing: 1.000000
-    CapitalizationOverride: None
-  DepthTest: false
-  TwoSided: false
 - !<SceneObject/a0a61120-eab4-4ea5-aa20-6d912aac738e>
   PrefabRemaps:
     []
@@ -4668,7 +4580,7 @@
   LocalTransform:
     position: {x: -18.000000, y: -32.000000, z: 2.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    scale: {x: 0.000000, y: 0.000000, z: 0.000000}
     hasSegmentScaleCompensation: false
   Children:
     - !<own> 8b3b9ad5-c3c9-427d-81b7-e6b33b4a5038
@@ -6143,11 +6055,100 @@
   ScriptTypes:
     "":
       {}
+- !<Text/ce50eb1f-f60e-42ee-93cb-5142062ab3f9>
+  PrefabRemaps:
+    []
+  Name: Text
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Top
+  HorizontalAlignment: Left
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Text: |-
+    4.8 * * * * *
+    266 Ferst Dr NW, Atlanta, GA 30332
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+  Editable: false
+  ShowEditingPreview: true
+  TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
+  SizeToFit: false
+  FontSize: 48
+  Font: !<reference> 00000000-0000-0000-0000-000000000000
+  LayoutRect:
+    left: 0.000000
+    bottom: -10.000000
+    right: 17.000000
+    top: 5.000000
+  OverflowVertical: Truncate
+  OverflowHorizontal: Truncate
+  Fill: !<TextFill>
+    Mode: Solid
+    Color: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    Texture: !<reference> 00000000-0000-0000-0000-000000000000
+    TileCount: 5.000000
+    TileZone: Rect
+    TextureStretch: FitWidth
+  Outline: !<OutlineSettings>
+    Enabled: false
+    Fill: !<TextFill>
+      Mode: Solid
+      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
+      Texture: !<reference> 00000000-0000-0000-0000-000000000000
+      TileCount: 5.000000
+      TileZone: Rect
+      TextureStretch: FitWidth
+    Size: 0.250000
+  Dropshadow: !<DropshadowSettings>
+    Enabled: false
+    Fill: !<TextFill>
+      Mode: Solid
+      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
+      Texture: !<reference> 00000000-0000-0000-0000-000000000000
+      TileCount: 5.000000
+      TileZone: Rect
+      TextureStretch: FitWidth
+    OffsetX: 0.250000
+    OffsetY: 0.250000
+  Background: !<BackgroundSettings>
+    Enabled: false
+    Fill: !<TextFill>
+      Mode: Solid
+      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
+      Texture: !<reference> 00000000-0000-0000-0000-000000000000
+      TileCount: 5.000000
+      TileZone: Rect
+      TextureStretch: FitWidth
+    Margins:
+      left: 0.000000
+      bottom: 0.000000
+      right: 0.000000
+      top: 0.000000
+    CornerRadius: 0.000000
+  AdvancedLayout: !<TextAdvancedLayout>
+    ExtentsTarget: !<reference> 00000000-0000-0000-0000-000000000000
+    LetterSpacing: 0.000000
+    LineSpacing: 1.000000
+    CapitalizationOverride: None
+  DepthTest: false
+  TwoSided: false
 - !<SceneObject/d1583ee4-a7ed-4727-a912-a62530c0984d>
   PrefabRemaps:
     []
   Name: "[MapComponent]"
-  Enabled: false
+  Enabled: true
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: -130.000000}
@@ -7032,7 +7033,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: -20.000000}
+    position: {x: 0.000000, y: -3.200000, z: -10.000000}
     rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false

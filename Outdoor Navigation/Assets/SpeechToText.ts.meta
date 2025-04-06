@@ -26,6 +26,7 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    mapComponent: false
     remoteServiceModule: false
     text: false
   ScriptTypesHidden:
@@ -34,9 +35,11 @@
   DefaultScriptInputs:
     - text: !<reference.Text> 00000000-0000-0000-0000-000000000000
       remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
+      mapComponent: !<MappingBased.MapComponent> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input Component.Text text
     - // @input Asset.RemoteServiceModule remoteServiceModule
+    - // @input MapComponent mapComponent
