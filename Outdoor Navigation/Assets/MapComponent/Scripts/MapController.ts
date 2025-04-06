@@ -26,13 +26,12 @@ import {
 } from "./MapUtils";
 import { PinOffsetter } from "./PinOffsetter";
 import { PlaceInfo, SnapPlacesProvider } from "./SnapPlacesProvider";
+import { NEARBY_PLACES_RANGE } from "./PlacesConfig";
 
 const TEXTURE_SIZE = 512;
 
 const MAX_LATITUDE = 85.05112878;
 const MAX_LONGITUDE = -180;
-
-const NEARBY_PLACES_RANGE = 100;
 
 const CENTER_MAP_TWEEN_DURATION = 0.5;
 
@@ -854,6 +853,15 @@ export class MapController extends BaseScriptComponent {
    * Setting a new location for the map
    */
   private setNewMapLocation(location: GeoPosition): void {
+    // Add logging for coordinates
+    print(`Latitude: ${location.latitude}, Longitude: ${location.longitude}`);
+    
+    // Check for invalid coordinates
+    if (location.latitude === 0 && location.longitude === 0) {
+      log.e("Invalid coordinates detected (0,0). Please check location services.");
+      return;
+    }
+
     this.mapLocation = location;
     this.pinOffsetter.bindScreenTransformToLocation(
       this.mapPinsAnchor.getComponent("ScreenTransform"),
