@@ -1,8 +1,10 @@
 
 
-// @input Asset.RemoteServiceModule remoteServiceModule
+
 const Module    = require("../Snapchat Places API API Module");
-const ApiModule = new Module.ApiModule(script.remoteServiceModule);
+const ApiModule = require("LensStudio:RemoteServiceModule");
+
+
 let NEARBY_PLACES_LIMIT = 20;
 
 const PlacesAPI = {
@@ -83,5 +85,9 @@ const PlacesAPI = {
  }
 };
 
-module.exports = PlacesAPI;
+function onAwake() {
+  
+};
+
+// module.exports = PlacesAPI;
 onAwake();
