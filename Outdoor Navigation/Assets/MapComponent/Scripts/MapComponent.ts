@@ -112,7 +112,7 @@ export class MapComponent extends BaseScriptComponent {
       mapLocation.heading = this.rotation;
     }
 
-    const mapFocusPosition = this.startedAsMiniMap ? new vec2(0.1, 0.9) : new vec2(0.5, 0.5);
+    const mapFocusPosition = new vec2(0.5, 0.5);
 
     const mapParameters: MapParameter = {
       tileCount: this.tileCount,

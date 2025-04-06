@@ -8,29 +8,35 @@ import {
   clamp,
   smoothDamp,
   smoothDampAngle,
+  DegToRad,
 } from "../SpectaclesInteractionKit/Utils/mathUtils";
 import { UpdateDispatcher } from "../SpectaclesInteractionKit/Utils/UpdateDispatcher";
 import { validate } from "../SpectaclesInteractionKit/Utils/validate";
-import { TWEEN_DURATION } from "./MapUIController";
-import { NorthIndicator } from "./NorthIndicator";
-
-const CONTAINER_SIZE_MINI = new vec2(10, 10);
-const CONTAINER_SIZE_FULL = new vec2(54.0, 54.0);
-const CONTAINER_FRAME_SIZE_MINI = new vec2(18, 18);
-const CONTAINER_DISTANCE_MINI = 130;
-const CONTAINER_DISTANCE_FULL = 175;
+import {
+  TWEEN_DURATION,
+  CONTAINER_SIZE_MINI,
+  CONTAINER_SIZE_FULL,
+  CONTAINER_DISTANCE_MINI,
+  CONTAINER_DISTANCE_FULL,
+} from "./MapConstants";
 
 @component
 export class MapContainerController extends BaseScriptComponent {
   @input
   private mapComponent: MapComponent;
 
-  @input private translationXTime: number = 1;
-  @input private translationYTime: number = 0.35;
-  @input private translationZTime: number = 0.35;
-  @input private rotationTime: number = 0.55;
-  @input private minFollowDistance: number = 50;
-  @input private maxFollowDistance: number = 160;
+  @input
+  private translationXTime: number = 1;
+  @input
+  private translationYTime: number = 0.35;
+  @input
+  private translationZTime: number = 0.35;
+  @input
+  private rotationTime: number = 0.55;
+  @input
+  private minFollowDistance: number = 50;
+  @input
+  private maxFollowDistance: number = 160;
 
   private container: ContainerFrame;
   private updateDispatcher: UpdateDispatcher =
@@ -43,19 +49,26 @@ export class MapContainerController extends BaseScriptComponent {
   private visibleWidth: number = 20;
   private minElevation: number = -40;
   private maxElevation: number = 40;
-  private target: vec3;
-  private velocity: vec3;
-  private omega: number;
-  private heading: number;
-  private initialRot: quat;
+  private target: vec3; // cylindrical coords of where the follower wants to be
+  private velocity: vec3; // current velocity of follower in cylindrical space
+  private omega: number; // current rotational velocity of the follower's heading
+  private heading: number; // current direction the follower is facing in world space, with -z being 0
+  private initialRot: quat; // original orientation of the follower that the dynamic heading is applied to
   private containerTransform: Transform;
-  private dragging: boolean;
+  private dragging: boolean; // to reposition the follow position, the manipulator will turn this on then back off
 
   private tweenCancelFunction: CancelFunction;
 
-  // Offset in world space to apply after follow logic
-  private savedOffset: vec3 = vec3.zero();
-  private northIndicator: NorthIndicator;
+  // Store saved positions for both modes
+  private minimapSettings = {
+    position: vec3.zero(),
+    scale: 1.0
+  };
+
+  private maximizedMapSettings = {
+    position: vec3.zero(),
+    scale: 1.0
+  };
 
   onAwake() {
     this.createEvent("OnStartEvent").bind(this.onStart.bind(this));
@@ -68,33 +81,12 @@ export class MapContainerController extends BaseScriptComponent {
       ContainerFrame.getTypeName()
     );
 
-    // Initial minimap styling
-    if (this.mapComponent.startedAsMiniMap) {
-      this.container.border = 2;
-      this.container.cutOut = true;
-      (this.container as any).borderAlpha = 0.3;
-    }
-
     this.container.setIsFollowing(this.mapComponent.startedAsMiniMap);
-    
-    // Create North indicator
-    const northIndicatorObj = global.scene.createSceneObject("NorthIndicator");
-    const textComponent = northIndicatorObj.createComponent("Component.Text");
-    textComponent.text = "N";
-    (textComponent as any).FontSize = 24;
-    
-    // Position the indicator at the top of the minimap
-    northIndicatorObj.setParent(this.sceneObject);
-    const transform = northIndicatorObj.getTransform();
-    transform.setLocalPosition(new vec3(0, 10, 2));
-    
-    // Add the NorthIndicator script
-    this.northIndicator = northIndicatorObj.createComponent(NorthIndicator.getTypeName()) as NorthIndicator;
-    this.northIndicator.text = "N";
 
     this.container.followButton.onTrigger.add(
       this.handleFollowButtonTrigger.bind(this)
     );
+
     this.mapComponent.onMiniMapToggled.add(
       this.handleMiniMapToggled.bind(this)
     );
@@ -104,13 +96,17 @@ export class MapContainerController extends BaseScriptComponent {
     this.containerYOffset =
       this.container.getWorldPosition().y -
       this.cameraTransform.getWorldPosition().y;
+
     this.containerTransform = this.container.parentTransform;
 
     this.initializeSmoothFollow();
   }
 
   private onUpdate() {
-    if (!this.container.isFollowing) return;
+    if (!this.container.isFollowing) {
+      return;
+    }
+
     this.updateSmoothFollow();
   }
 
@@ -118,9 +114,10 @@ export class MapContainerController extends BaseScriptComponent {
     this.target = vec3.zero();
     this.velocity = vec3.zero();
     this.omega = 0;
-    this.heading = this.cameraHeading;
+    this.heading = 0;
     this.dragging = false;
     this.initialRot = this.containerTransform.getLocalRotation();
+    this.heading = this.cameraHeading;
 
     this.worldRot = quat
       .angleAxis(this.heading, vec3.up())
@@ -136,91 +133,78 @@ export class MapContainerController extends BaseScriptComponent {
   }
 
   private updateSmoothFollow() {
-    if (this.dragging) return;
+    if (!this.dragging) {
+      const pos = this.cartesianToCylindrical(this.worldToBody(this.worldPos));
 
-    // Smooth cylindrical follow (ignores savedOffset here)
-    const pos = this.cartesianToCylindrical(
-      this.worldToBody(
-        this.worldPos.sub(this.savedOffset)
-      )
-    );
+      // Get the saved target Y position based on current mode
+      const savedSettings = this.mapComponent.startedAsMiniMap 
+        ? this.minimapSettings 
+        : this.maximizedMapSettings;
+      
+      const currentY = this.worldPos.y;
+      const targetY = savedSettings.position.y !== 0 
+        ? savedSettings.position.y 
+        : this.cameraTransform.getWorldPosition().y + this.containerYOffset;
+      let newY;
 
-    // Smooth heading
-    [pos.x, this.velocity.x] = smoothDamp(
-      pos.x,
-      this.target.x,
-      this.velocity.x,
-      this.translationXTime,
-      getDeltaTime()
-    );
-    [pos.z, this.velocity.z] = smoothDamp(
-      pos.z,
-      this.target.z,
-      this.velocity.z,
-      this.translationZTime,
-      getDeltaTime()
-    );
+      [pos.x, this.velocity.x] = smoothDamp(
+        pos.x,
+        this.target.x,
+        this.velocity.x,
+        this.translationXTime,
+        getDeltaTime()
+      );
+      [newY, this.velocity.y] = smoothDamp(
+        currentY,
+        targetY,
+        this.velocity.y,
+        this.translationYTime,
+        getDeltaTime()
+      );
+      [pos.z, this.velocity.z] = smoothDamp(
+        pos.z,
+        this.target.z,
+        this.velocity.z,
+        this.translationZTime,
+        getDeltaTime()
+      );
 
-    // Compute new world XZ position (base follow position)
-    const worldXZPos = this.bodyToWorld(this.cylindricalToCartesian(pos));
-
-    // Vertical follow
-    const currentY = this.worldPos.y - this.savedOffset.y;
-    const targetY =
-      this.cameraTransform.getWorldPosition().y + this.containerYOffset;
-    let newY: number;
-    [newY, this.velocity.y] = smoothDamp(
-      currentY,
-      targetY,
-      this.velocity.y,
-      this.translationYTime,
-      getDeltaTime()
-    );
-
-    // Reconstruct base follow position
-    const basePosition = new vec3(worldXZPos.x, newY, worldXZPos.z);
-
-    // Apply saved offset (clamped already)
-    this.worldPos = basePosition.add(this.savedOffset);
-
-    // Smooth rotation to face camera
-    [this.heading, this.omega] = smoothDampAngle(
-      this.heading,
-      this.cameraHeading,
-      this.omega,
-      this.rotationTime,
-      getDeltaTime()
-    );
-    this.worldRot = quat
-      .lookAt(this.cameraPos.sub(this.worldPos).normalize(), vec3.up())
-      .multiply(this.initialRot);
+      const worldXZPos = this.bodyToWorld(this.cylindricalToCartesian(pos));
+      this.worldPos = new vec3(worldXZPos.x, newY, worldXZPos.z);
+      [this.heading, this.omega] = smoothDampAngle(
+        this.heading,
+        this.cameraHeading,
+        this.omega,
+        this.rotationTime,
+        getDeltaTime()
+      );
+      // force billboard
+      this.worldRot = quat
+        .lookAt(this.cameraPos.sub(this.worldPos).normalize(), vec3.up())
+        .multiply(this.initialRot);
+    }
   }
 
   private handleMiniMapToggled(isMiniMap: boolean) {
-    if (this.tweenCancelFunction) {
+    if (this.tweenCancelFunction !== undefined) {
       this.tweenCancelFunction();
       this.tweenCancelFunction = undefined;
     }
 
-    const containerWorldPosition =
+    const containerWorldPosition: vec3 =
       this.containerTransform.getWorldPosition();
 
     if (isMiniMap) {
       this.mapComponent.centerMap();
-      this.container.border = 2;
-      this.container.cutOut = true;
-      (this.container as any).borderAlpha = 0.3;
 
-      const cameraForward = this.cameraTransform.forward;
-      const cameraRight = this.cameraTransform.right;
-      const cameraUp = this.cameraTransform.up; // fixed: property not callable
-      const offset = 0.1;
-      const targetWorldPosition = this.cameraPos
-        .add(cameraForward.uniformScale(CONTAINER_DISTANCE_MINI))
-        .add(cameraRight.uniformScale(-CONTAINER_DISTANCE_MINI * offset))
-        .add(cameraUp.uniformScale(CONTAINER_DISTANCE_MINI * offset))
-        .add(new vec3(0, this.containerYOffset, 0))
-        .add(this.savedOffset);
+      // Use saved minimap position if it exists
+      const targetWorldPosition = this.minimapSettings.position.equal(vec3.zero()) 
+        ? containerWorldPosition
+            .sub(this.cameraPos)
+            .normalize()
+            .uniformScale(CONTAINER_DISTANCE_MINI)
+            .add(this.cameraPos)
+        : this.minimapSettings.position;
 
       this.tweenCancelFunction = makeTween((t) => {
         this.container.innerSize = vec2.lerp(
@@ -228,42 +212,41 @@ export class MapContainerController extends BaseScriptComponent {
           CONTAINER_SIZE_MINI,
           t
         );
-        (this.container as any).outerSize = vec2.lerp(
-          CONTAINER_SIZE_FULL,
-          CONTAINER_FRAME_SIZE_MINI,
-          t
-        );
+
         this.containerTransform.setWorldPosition(
           vec3.lerp(containerWorldPosition, targetWorldPosition, t)
         );
+
         if (t > 0.9999) {
           this.container.setIsFollowing(true);
-          this.clampPosition();
+          this.initializeSmoothFollow();
         }
       }, TWEEN_DURATION);
     } else {
-      this.container.border = 7;
-      this.container.cutOut = false;
-      (this.container as any).borderAlpha = 1.0;
-      this.container.setIsFollowing(true);
-
-      const cameraForward = this.cameraTransform.forward;
-      const targetWorldPosition = this.cameraPos
-        .add(cameraForward.uniformScale(CONTAINER_DISTANCE_FULL))
-        .add(new vec3(0, this.containerYOffset, 0))
-        .add(this.savedOffset);
+      // Use saved maximized map position if it exists
+      const targetWorldPosition = this.maximizedMapSettings.position.equal(vec3.zero())
+        ? containerWorldPosition
+            .sub(this.cameraPos)
+            .normalize()
+            .uniformScale(CONTAINER_DISTANCE_FULL)
+            .add(this.cameraPos)
+        : this.maximizedMapSettings.position;
 
       this.tweenCancelFunction = makeTween((t) => {
-        const newSize = vec2.lerp(
+        this.container.innerSize = vec2.lerp(
           CONTAINER_SIZE_MINI,
           CONTAINER_SIZE_FULL,
           t
         );
-        this.container.innerSize = newSize;
-        (this.container as any).outerSize = newSize;
+
         this.containerTransform.setWorldPosition(
           vec3.lerp(containerWorldPosition, targetWorldPosition, t)
         );
+
+        if (t > 0.9999) {
+          this.container.setIsFollowing(true);
+          this.initializeSmoothFollow();
+        }
       }, TWEEN_DURATION);
     }
   }
@@ -278,45 +261,14 @@ export class MapContainerController extends BaseScriptComponent {
 
   finishDragging(): void {
     this.dragging = false;
-    
-    // Get the camera's forward and right vectors
-    const cameraForward = this.cameraTransform.forward;
-    const cameraRight = this.cameraTransform.right;
-    
-    // Get the current world position
-    const currentWorldPos = this.worldPos;
-    
-    // Calculate the vector from camera to current position
-    const cameraToMap = currentWorldPos.sub(this.cameraPos);
-    
-    // Project onto camera's forward and right planes
-    const forwardDistance = cameraToMap.dot(cameraForward);
-    const rightDistance = cameraToMap.dot(cameraRight);
-    
-    // Calculate the base position (where the map should be without offset)
-    const isMini = this.container.cutOut;
-    const baseDistance = isMini ? CONTAINER_DISTANCE_MINI : CONTAINER_DISTANCE_FULL;
-    const basePosition = this.cameraPos
-      .add(cameraForward.uniformScale(baseDistance))
-      .add(new vec3(0, this.containerYOffset, 0));
-    
-    // Calculate the offset in camera space
-    const cameraSpaceOffset = new vec3(
-      rightDistance,
-      currentWorldPos.y - basePosition.y,
-      forwardDistance - baseDistance
-    );
-    
-    // Clamp the offset
-    const maxOffset = isMini ? 20 : 40;
-    this.savedOffset = new vec3(
-      clamp(cameraSpaceOffset.x, -maxOffset, maxOffset),
-      clamp(cameraSpaceOffset.y, -maxOffset, maxOffset),
-      clamp(cameraSpaceOffset.z, -maxOffset, maxOffset)
-    );
-
-    // Re-clamp target ignoring offset
     this.clampPosition();
+
+    // Save the current position based on the current mode
+    if (this.mapComponent.startedAsMiniMap) {
+      this.minimapSettings.position = this.containerTransform.getWorldPosition();
+    } else {
+      this.maximizedMapSettings.position = this.containerTransform.getWorldPosition();
+    }
   }
 
   resize(visibleWidth: number): void {
@@ -325,33 +277,30 @@ export class MapContainerController extends BaseScriptComponent {
   }
 
   private clampPosition(): void {
-    if (this.dragging) return;
-    // Use world position minus offset to compute pure follow target
-    const pureWorldPos = this.worldPos.sub(this.savedOffset);
-    this.target = this.cartesianToCylindrical(
-      this.worldToBody(pureWorldPos)
-    );
+    // the initial goal of the follower is whereever it is relative to the
+    // camera when the component gets enabled. the grab bar works by disabling
+    // this component when grabbed, and reenables it when let go.
+
+    if (this.dragging) return; // skip while actively scaling
+
+    this.target = this.cartesianToCylindrical(this.worldToBody(this.worldPos));
 
     this.target.z = clamp(
       this.target.z,
       this.minFollowDistance,
       this.maxFollowDistance
     );
+
     this.target.z = Math.max(
       this.target.z,
       (1.1 * this.visibleWidth) /
         2 /
-        Math.tan((this.fieldOfView / 2) * MathUtils.DegToRad)
-    );
+        Math.tan((this.fieldOfView / 2) * DegToRad)
+    ); // handle very wide panels
 
-    this.target.y = clamp(
-      this.target.y,
-      this.minElevation,
-      this.maxElevation
-    );
+    this.target.y = clamp(this.target.y, this.minElevation, this.maxElevation);
     const halfFov = this.halfFov;
     this.target.x = clamp(this.target.x, -halfFov, halfFov);
-
     this.velocity = vec3.zero();
     this.omega = 0;
   }
@@ -359,7 +308,7 @@ export class MapContainerController extends BaseScriptComponent {
   private get halfFov(): number {
     const dist = new vec2(this.target.y, this.target.z).length;
     return Math.atan(
-      (Math.tan((this.fieldOfView / 2) * MathUtils.DegToRad) * dist -
+      (Math.tan((this.fieldOfView / 2) * DegToRad) * dist -
         this.visibleWidth / 2) /
         this.target.z
     );

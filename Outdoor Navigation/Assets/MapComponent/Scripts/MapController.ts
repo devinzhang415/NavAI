@@ -111,6 +111,7 @@ export class MapController extends BaseScriptComponent {
     LensConfig.getInstance().updateDispatcher;
 
   private isInitialized: boolean = false;
+  private preventAutoCenter: boolean = false;
 
   private onInitialLocationSetEvent = new Event<GeoPosition>();
   public onInitialLocationSet = this.onInitialLocationSetEvent.publicApi();
@@ -224,7 +225,7 @@ export class MapController extends BaseScriptComponent {
       this.mapParameters.mapUpdateThreshold
     ) {
       this.fetchLocation((location: GeoPosition) => {
-        if (!this.mapParameters.setMapToCustomLocation) {
+        if (!this.mapParameters.setMapToCustomLocation && !this.preventAutoCenter) {
           this.setNewMapLocation(location);
         }
 
@@ -1141,5 +1142,9 @@ export class MapController extends BaseScriptComponent {
         log.e(error);
         this.onNearbyPlacesFailedEvent.invoke();
       });
+  }
+
+  setPreventAutoCenter(prevent: boolean): void {
+    this.preventAutoCenter = prevent;
   }
 }
