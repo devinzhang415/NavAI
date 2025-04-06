@@ -26,6 +26,7 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    geminiHandler: false
     mapComponent: false
     popupController: false
     uiImage: false
@@ -36,10 +37,12 @@
     - uiImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
       mapComponent: !<MappingBased.MapComponent> 00000000-0000-0000-0000-000000000000
       popupController: !<MappingBased.PopupController> 00000000-0000-0000-0000-000000000000
+      geminiHandler: !<MappingBased.geminiHandler> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input MapComponent mapComponent
     - // @input PopupController popupController
+    - // @input geminiHandler geminiHandler
     - // @input Component.Image uiImage
